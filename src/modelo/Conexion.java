@@ -34,8 +34,10 @@ public class Conexion {
             Class.forName(driver);
             con = DriverManager.getConnection(connectString, user, password);
         } catch (SQLException e) {
+            log.error("SQLexception: ",e);
             System.out.println("sqlexcepcion");
         } catch (ClassNotFoundException e) {
+            log.error("classnofoundexception: ",e);
             System.out.println("classnofoundexception");
         }
         return con;

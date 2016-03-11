@@ -1,0 +1,102 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package obj;
+
+/**
+ *
+ * @author Usuario
+ */
+public class Registro {
+
+    public Registro() {
+    }
+    
+    private int registroid;
+    private String matriculaori;
+    private String predialori;
+    private String direccion;
+    private String tipo;
+    private String estado;
+    private String fecharecibido;
+    private int municipioidfk;
+    private String circulo;
+
+    public int getRegistroid() {
+        return registroid;
+    }
+
+    public void setRegistroid(int registroid) {
+        this.registroid = registroid;
+    }
+
+    public String getMatriculaori() {
+        return matriculaori;
+    }
+
+    public void setMatriculaori(String matriculaori) {
+        this.matriculaori = matriculaori;
+    }
+
+    public String getPredialori() {
+        return predialori;
+    }
+
+    public void setPredialori(String predialori) {
+        this.predialori = predialori;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getFecharecibido() {
+        return fecharecibido;
+    }
+
+    public void setFecharecibido(String fecharecibido) {
+        this.fecharecibido = fecharecibido;
+    }
+
+    public int getMunicipioidfk() {
+        return municipioidfk;
+    }
+
+    public void setMunicipioidfk(int municipioidfk) {
+        this.municipioidfk = municipioidfk;
+    }
+
+    public String getCirculo() {
+        return circulo;
+    }
+
+    public void setCirculo(String circulo) {
+        this.circulo = circulo;
+    }
+    
+    
+    
+}
