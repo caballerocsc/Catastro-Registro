@@ -16,8 +16,8 @@ public class ITR {
     }
     
     private int itrid;
-    private int departamentoidfk ;
-    private int municipioidfk;
+    private String departamentoidfk ;
+    private String municipioidfk;
     private String fecharecibido;
     private String numpredio;
     private String avaluos;
@@ -51,19 +51,19 @@ public class ITR {
         this.itrid = itrid;
     }
 
-    public int getDepartamentoidfk() {
+    public String getDepartamentoidfk() {
         return departamentoidfk;
     }
 
-    public void setDepartamentoidfk(int departamentoidfk) {
+    public void setDepartamentoidfk(String departamentoidfk) {
         this.departamentoidfk = departamentoidfk;
     }
 
-    public int getMunicipioidfk() {
+    public String getMunicipioidfk() {
         return municipioidfk;
     }
 
-    public void setMunicipioidfk(int municipioidfk) {
+    public void setMunicipioidfk(String municipioidfk) {
         this.municipioidfk = municipioidfk;
     }
 

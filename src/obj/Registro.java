@@ -22,7 +22,8 @@ public class Registro {
     private String tipo;
     private String estado;
     private String fecharecibido;
-    private int municipioidfk;
+    private String municipioidfk;
+    private String departamentoidfk;
     private String circulo;
 
     public int getRegistroid() {
@@ -81,12 +82,20 @@ public class Registro {
         this.fecharecibido = fecharecibido;
     }
 
-    public int getMunicipioidfk() {
+    public String getMunicipioidfk() {
         return municipioidfk;
     }
 
-    public void setMunicipioidfk(int municipioidfk) {
+    public void setMunicipioidfk(String municipioidfk) {
         this.municipioidfk = municipioidfk;
+    }
+
+    public String getDepartamentoidfk() {
+        return departamentoidfk;
+    }
+
+    public void setDepartamentoidfk(String departamentoidfk) {
+        this.departamentoidfk = departamentoidfk;
     }
 
     public String getCirculo() {

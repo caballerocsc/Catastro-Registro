@@ -15,8 +15,8 @@ public enum Sentencias {
     
     INSERTARIGACCATASTRO("INSERT INTO Catastro (departamentoidfk,municipioidfk,numpredio,avaluo,sector,manzana,predio,propiedad,matricula,direccion,tipo,estado,fechaRecibido) VALUES\n" +
         " ('','','','','','','','','','','','','') RETURNING catastroid;"),
-    INSERTARIGACREGISTRO("INSERT INTO registro (matriculaori,predialori,direccion,tipo,estado,fecharecibido,municipioidfk) VALUES\n" +
-        " ('','','','','','','') RETURNING registroid;"),
+    INSERTARIGACREGISTRO("INSERT INTO registro (matriculaori,predialori,direccion,tipo,estado,fecharecibido,municipioidfk,departamentoidfk) VALUES\n" +
+        " ('','','','','','','','') RETURNING registroid;"),
     INSERTARIGACITR("INSERT INTO ITR (departamentoidfk,municipioidfk,fecharecibido,numpredio,avaluos,sector,manzana,predio,propiedad,circulo,matricula,areaterreno,areaconstruida,direccioncat,direccionreg,crpredial,crmatricula,crdireccion,crdocumento,crnombre) VALUES\n" +
         " ('','','','','','','','','','','','','','','','','','','') RETURNING itrid"),
     INSERTARIGACCATASTROPROPIETARIO("INSERT INTO catastro_propietarios (catastroid_Catastro,propietarioid_propietarios) VALUES\n" +

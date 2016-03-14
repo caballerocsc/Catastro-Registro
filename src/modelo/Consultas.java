@@ -92,8 +92,8 @@ public class Consultas {
         try{
             int i=1;
             ps=cn.prepareStatement(sbd.getSentencia());
-            ps.setInt(i++ , c.getDepartamentoidfk());
-            ps.setInt(i++ , c.getMunicipioidfk());
+            ps.setString(i++ , c.getDepartamentoidfk());
+            ps.setString(i++ , c.getMunicipioidfk());
             ps.setString(i++ , c.getNumpredio());
             ps.setString(i++ , c.getAvaluo());
             ps.setString(i++ , c.getSector());
@@ -135,7 +135,7 @@ public class Consultas {
             ps.setString(i++ , r.getTipo());
             ps.setString(i++ , r.getEstado());
             ps.setString(i++ , r.getFecharecibido());
-            ps.setInt(i++ , r.getMunicipioidfk());
+            ps.setString(i++ , r.getMunicipioidfk());
             rs=ps.executeQuery();
             i=1;
             if(rs.next())
@@ -160,8 +160,8 @@ public class Consultas {
         try{
             int i=1;
             ps=cn.prepareStatement(sbd.getSentencia());
-            ps.setInt(i++ , itr.getDepartamentoidfk());
-            ps.setInt(i++ , itr.getMunicipioidfk());
+            ps.setString(i++ , itr.getDepartamentoidfk());
+            ps.setString(i++ , itr.getMunicipioidfk());
             ps.setString(i++ , itr.getFecharecibido());
             ps.setString(i++ , itr.getNumpredio());
             ps.setString(i++ , itr.getAvaluos());
@@ -300,11 +300,17 @@ public class Consultas {
         try{
             int i=1;
             ps=cn.prepareStatement(sbd.getSentencia());
-            ps.setInt(i++ , c.getMunicipioidfk());
-            ps.setInt(i++ , c.getDepartamentoidfk());
+            ps.setString(i++ , c.getMunicipioidfk());
+            ps.setString(i++ , c.getDepartamentoidfk());
             ps.setString(i++ , c.getPredio());
-            ps.setString(i++ , c.getPredialcat28());
-            ps.setString(i++ , c.getPredialcat30());
+            if(c.getPredialcat28().equals(""))
+                ps.setString(i++ , c.getPredialcat28());
+            else
+                ps.setString(i++ , "");
+            if(c.getPredialcat30().equals(""))
+                ps.setString(i++ , c.getPredialcat30());
+            else
+                ps.setString(i++ , "");
             ps.setString(i++ , c.getAvaluo());
             ps.setString(i++ , c.getCorregimiento());
             ps.setString(i++ , c.getMatricula());
@@ -365,7 +371,7 @@ public class Consultas {
             ps.setString(i++ , r.getDireccion());
             ps.setString(i++ , r.getTipo());
             ps.setString(i++ , r.getEstado());
-            ps.setInt(i++ , r.getMunicipioidfk());
+            ps.setString(i++ , r.getMunicipioidfk());
             ps.setString(i++ , r.getFecharecibido());
             rs=ps.executeQuery();
             i=1;
@@ -415,14 +421,23 @@ public class Consultas {
         try{
             int i=1;
             ps=cn.prepareStatement(sbd.getSentencia());
-            ps.setInt(i++ , itr.getDepartamentoidfk());
-            ps.setInt(i++ , itr.getMunicipioidfk());
+            ps.setString(i++ , itr.getDepartamentoidfk());
+            ps.setString(i++ , itr.getMunicipioidfk());
             ps.setString(i++ , itr.getNumpredio());
-            ps.setString(i++ , itr.getPredialcat());
+            if(!itr.getPredialcat().equals(""))
+                ps.setString(i++ , itr.getPredialcat());
+            else
+                ps.setString(i++ , "");
             ps.setString(i++ , itr.getPredialcat28());
             ps.setString(i++ , itr.getPredialcat30());
-            ps.setString(i++ , itr.getAvaluos());
-            ps.setString(i++ , itr.getCorregimiento());
+            if(!itr.getAvaluos().equals(""))
+                ps.setString(i++ , itr.getAvaluos());
+            else
+                ps.setString(i++, "");
+            if(itr.getCorregimiento().equals(""))
+                ps.setString(i++ , itr.getCorregimiento());
+            else 
+                ps.setString(i++ , "");
             ps.setString(i++ , itr.getCirculo());
             ps.setString(i++ , itr.getMatricula());
             ps.setFloat(i++ , itr.getAreaterreno());
@@ -435,6 +450,10 @@ public class Consultas {
             ps.setString(i++ , itr.getCrdocumento());
             ps.setString(i++ , itr.getCrnombre());
             ps.setString(i++ , itr.getFecharecibido());
+            if(itr.getTipopredio().equals(""))
+                ps.setString(i++, itr.getTipopredio());
+            else
+                ps.setString(i++, "");
             rs=ps.executeQuery();
             i=1;
             if(rs.next())

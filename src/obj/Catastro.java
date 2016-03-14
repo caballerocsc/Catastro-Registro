@@ -16,8 +16,8 @@ public class Catastro {
     }
     
     private int catastroid;
-    private int departamentoidfk;
-    private int municipioidfk;
+    private String departamentoidfk;
+    private String municipioidfk;
     private String numpredio;
     private String avaluo;
     private String sector;
@@ -45,19 +45,19 @@ public class Catastro {
         this.catastroid = catastroid;
     }
 
-    public int getDepartamentoidfk() {
+    public String getDepartamentoidfk() {
         return departamentoidfk;
     }
 
-    public void setDepartamentoidfk(int departamentoidfk) {
+    public void setDepartamentoidfk(String departamentoidfk) {
         this.departamentoidfk = departamentoidfk;
     }
 
-    public int getMunicipioidfk() {
+    public String getMunicipioidfk() {
         return municipioidfk;
     }
 
-    public void setMunicipioidfk(int municipioidfk) {
+    public void setMunicipioidfk(String municipioidfk) {
         this.municipioidfk = municipioidfk;
     }
 
