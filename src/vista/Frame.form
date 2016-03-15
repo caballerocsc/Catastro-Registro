@@ -93,16 +93,25 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Cargar Medell&#xed;n"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BmedellinActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Bantioquia14">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cargar Antioquia 2014"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Bantioquia14ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Bantioquia15">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cargar Antioquia 2015"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Bantioquia15ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

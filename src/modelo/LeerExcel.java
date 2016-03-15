@@ -51,7 +51,7 @@ public class LeerExcel {
             FileInputStream fileIS = new FileInputStream(file);
             wb = new HSSFWorkbook(fileIS);
         } catch (IOException ex) {
-            log.error("Archivo no encontrado: ", ex);
+            log.error("Archivo no encontrado: "+file.getName(), ex);
         }
         return wb;
     }
@@ -59,7 +59,7 @@ public class LeerExcel {
     public String obtenerCelda(Cell c,Row r){
         String resultado="";
         if (c == null) {
-            log.info("Celda vacia");
+            log.info("Celda vacia en fila: "+r.getRowNum());
         } else {
             CellReference cellRef = new CellReference(r.getRowNum(), c.getColumnIndex());
             log.info(cellRef.formatAsString());
@@ -112,7 +112,7 @@ public class LeerExcel {
                         //el numero de documento esta fraccionado, por ello se concatena 
                         //y se omite el tipo de documento
                         for (int j = 0; j < datosProp.length - 1; j++) {
-                            temp = temp.concat(datosProp[1]);
+                            temp = temp.concat(datosProp[j]);
                         }
                         prop.setNumDoc((temp.substring(2)).trim());
                         break;
@@ -125,7 +125,8 @@ public class LeerExcel {
                 }
                 listaProp.add(prop);
             }
-        }
+        }else
+            log.warn("El propietario se encuentra vacio");
         return listaProp;
     }
     
@@ -148,7 +149,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -174,6 +175,7 @@ public class LeerExcel {
             cat.setPredio(fila.get(i++));
             cat.setPropiedad(fila.get(i++));
             cat.setMatricula(fila.get(i++));
+            cat.setDireccion(fila.get(i++));
             String propietario=fila.get(i++);
             cat.setTipo(fila.get(i++));
             cat.setEstado(fila.get(i++));
@@ -192,7 +194,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -232,7 +234,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -261,8 +263,8 @@ public class LeerExcel {
             itr.setPropiedad(fila.get(i++));
             itr.setCirculo(fila.get(i++));
             itr.setMatricula(fila.get(i++));
-            itr.setAreaterreno(Integer.parseInt(fila.get(i++)));
-            itr.setAreaconstruida(Integer.parseInt(fila.get(i++)));
+            itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
+            itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
             itr.setDireccioncat(fila.get(i++));
             itr.setDireccionreg(fila.get(i++));
             String propietarioCat=fila.get(i++);
@@ -276,11 +278,11 @@ public class LeerExcel {
             List<Integer> idsReg=guardarPropietarios(separarPropietarios(propietarioReg));
             int idITR=con.insertarIgacITR(itr);
             for (Integer idProp : idsCat) {
-                if(!con.insertarIgacRegistroProp(idITR, idProp))
+                if(!con.insertarIgacItrCatProp(idITR, idProp))
                     log.error("No se puedo crear la relacion ITRCat-propietario. idCatastro: "+idITR+" idProp: "+idProp);
             }
             for (Integer idProp : idsReg) {
-                if(!con.insertarIgacRegistroProp(idITR, idProp))
+                if(!con.insertarIgacItrRegProp(idITR, idProp))
                     log.error("No se puedo crear la relacion ITRreg-propietario. idCatastro: "+idITR+" idProp: "+idProp);
             }
         }
@@ -291,7 +293,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -333,7 +335,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -373,7 +375,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -430,7 +432,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -472,7 +474,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -512,7 +514,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -568,7 +570,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -599,11 +601,11 @@ public class LeerExcel {
         return true;
     }
     
-    public boolean MedellinRegistro(File ruta,String fecha) {
+    public boolean medellinRegistro(File ruta,String fecha) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
@@ -634,7 +636,7 @@ public class LeerExcel {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
         Consultas con=new Consultas();
-        int rowStart = 2;
+        int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);

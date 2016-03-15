@@ -6,6 +6,10 @@
 
 package vista;
 
+import Controlador.Controlador;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Usuario
@@ -44,10 +48,25 @@ public class Frame extends javax.swing.JFrame {
         });
 
         Bmedellin.setText("Cargar Medellín");
+        Bmedellin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BmedellinActionPerformed(evt);
+            }
+        });
 
         Bantioquia14.setText("Cargar Antioquia 2014");
+        Bantioquia14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Bantioquia14ActionPerformed(evt);
+            }
+        });
 
         Bantioquia15.setText("Cargar Antioquia 2015");
+        Bantioquia15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Bantioquia15ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -101,8 +120,44 @@ public class Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BigacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BigacActionPerformed
-        // TODO add your handling code here:
+        Controlador c=new Controlador();
+        String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
+        JFileChooser jFileChooser2;
+        jFileChooser2 = new javax.swing.JFileChooser();
+        jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        jFileChooser2.showOpenDialog(this);
+        c.cargarIgac(jFileChooser2, fecha);
     }//GEN-LAST:event_BigacActionPerformed
+
+    private void BmedellinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BmedellinActionPerformed
+        Controlador c=new Controlador();
+        String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
+        JFileChooser jFileChooser2;
+        jFileChooser2 = new javax.swing.JFileChooser();
+        jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        jFileChooser2.showOpenDialog(this);
+        c.cargarMedellin(jFileChooser2, fecha);
+    }//GEN-LAST:event_BmedellinActionPerformed
+
+    private void Bantioquia14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bantioquia14ActionPerformed
+        Controlador c=new Controlador();
+        String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
+        JFileChooser jFileChooser2;
+        jFileChooser2 = new javax.swing.JFileChooser();
+        jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        jFileChooser2.showOpenDialog(this);
+        c.cargarAntioquia2014(jFileChooser2, fecha);
+    }//GEN-LAST:event_Bantioquia14ActionPerformed
+
+    private void Bantioquia15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bantioquia15ActionPerformed
+        Controlador c=new Controlador();
+        String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
+        JFileChooser jFileChooser2;
+        jFileChooser2 = new javax.swing.JFileChooser();
+        jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        jFileChooser2.showOpenDialog(this);
+        c.cargarAntioquia2015(jFileChooser2, fecha);
+    }//GEN-LAST:event_Bantioquia15ActionPerformed
 
     /**
      * @param args the command line arguments

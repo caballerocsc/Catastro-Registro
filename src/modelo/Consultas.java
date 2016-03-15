@@ -46,7 +46,7 @@ public class Consultas {
                 return id;
             
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception:verificarPropietario", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -73,7 +73,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarPropietario", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -110,7 +110,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarIgacCatastro", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -141,7 +141,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarIgacRegistro", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -185,7 +185,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarIgacITR", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -206,10 +206,11 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idCat);
             ps.setInt(i++ , idProp);
-            rs=ps.executeQuery();
+            System.out.println("consulta: "+ps.toString());
+            ps.executeUpdate();
             result=true;
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarIgacCatastroProp", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -230,10 +231,10 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idReg);
             ps.setInt(i++ , idProp);
-            rs=ps.executeQuery();
+            ps.executeUpdate();
             result=true;
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarIgacRegistroProp", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -254,10 +255,10 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idItr);
             ps.setInt(i++ , idProp);
-            rs=ps.executeQuery();
+            ps.executeUpdate();
             result=true;
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarIgacItrCatProp", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -278,10 +279,10 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idItr);
             ps.setInt(i++ , idProp);
-            rs=ps.executeQuery();
+            ps.executeUpdate();
             result=true;
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarIgacItrRegProp", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -323,7 +324,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarAntioquiaCatastro", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -347,7 +348,7 @@ public class Consultas {
             rs=ps.executeQuery();
             result=true;
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarAntioquiaCatProp", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -378,7 +379,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarAntioquiaRegistro", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -402,7 +403,7 @@ public class Consultas {
             rs=ps.executeQuery();
             result=true;
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarAntioquiaRegProP", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -459,7 +460,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarAntioquiaITR", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -484,7 +485,7 @@ public class Consultas {
             rs=ps.executeQuery();
             result=true;
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarAntioquiaItrCatProP", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -509,7 +510,7 @@ public class Consultas {
             rs=ps.executeQuery();
             result=true;
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarAntioquiaItrRegProP", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -539,7 +540,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarMedellinCatastro", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -567,7 +568,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarMedellinRegistro", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -605,7 +606,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception:", e);
+            log.error("SQL Exception: insertarMedellinITR", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
