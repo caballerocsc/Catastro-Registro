@@ -136,6 +136,7 @@ public class Consultas {
             ps.setString(i++ , r.getEstado());
             ps.setString(i++ , r.getFecharecibido());
             ps.setString(i++ , r.getMunicipioidfk());
+            ps.setString(i++ , r.getDepartamentoidfk());
             rs=ps.executeQuery();
             i=1;
             if(rs.next())
@@ -304,11 +305,11 @@ public class Consultas {
             ps.setString(i++ , c.getMunicipioidfk());
             ps.setString(i++ , c.getDepartamentoidfk());
             ps.setString(i++ , c.getPredio());
-            if(c.getPredialcat28().equals(""))
+            if(c.getPredialcat28()!=null)
                 ps.setString(i++ , c.getPredialcat28());
             else
                 ps.setString(i++ , "");
-            if(c.getPredialcat30().equals(""))
+            if(c.getPredialcat30()!=null)
                 ps.setString(i++ , c.getPredialcat30());
             else
                 ps.setString(i++ , "");
@@ -345,7 +346,7 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idAntCat);
             ps.setInt(i++ , idProp);
-            rs=ps.executeQuery();
+            ps.executeUpdate();
             result=true;
         }catch(SQLException e){
             log.error("SQL Exception: insertarAntioquiaCatProp", e);
@@ -400,7 +401,7 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idAntReg);
             ps.setInt(i++ , idProp);
-            rs=ps.executeQuery();
+            ps.executeUpdate();
             result=true;
         }catch(SQLException e){
             log.error("SQL Exception: insertarAntioquiaRegProP", e);
@@ -425,17 +426,17 @@ public class Consultas {
             ps.setString(i++ , itr.getDepartamentoidfk());
             ps.setString(i++ , itr.getMunicipioidfk());
             ps.setString(i++ , itr.getNumpredio());
-            if(!itr.getPredialcat().equals(""))
+            if(itr.getPredialcat()!=null)
                 ps.setString(i++ , itr.getPredialcat());
             else
                 ps.setString(i++ , "");
             ps.setString(i++ , itr.getPredialcat28());
             ps.setString(i++ , itr.getPredialcat30());
-            if(!itr.getAvaluos().equals(""))
+            if(itr.getAvaluos()!=null)
                 ps.setString(i++ , itr.getAvaluos());
             else
                 ps.setString(i++, "");
-            if(itr.getCorregimiento().equals(""))
+            if(itr.getCorregimiento()!=null)
                 ps.setString(i++ , itr.getCorregimiento());
             else 
                 ps.setString(i++ , "");
@@ -451,7 +452,7 @@ public class Consultas {
             ps.setString(i++ , itr.getCrdocumento());
             ps.setString(i++ , itr.getCrnombre());
             ps.setString(i++ , itr.getFecharecibido());
-            if(itr.getTipopredio().equals(""))
+            if(itr.getTipopredio()!=null)
                 ps.setString(i++, itr.getTipopredio());
             else
                 ps.setString(i++, "");
@@ -460,7 +461,7 @@ public class Consultas {
             if(rs.next())
                 id=rs.getInt(i);
         }catch(SQLException e){
-            log.error("SQL Exception: insertarAntioquiaITR", e);
+            log.error("SQL Exception: insertarAntioquiaITR2014", e);
         }finally{
             con.cerrar(cn);
             con.cerrar(ps);
@@ -482,7 +483,7 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idAntcat);
             ps.setInt(i++ , idProp);
-            rs=ps.executeQuery();
+            ps.executeUpdate();
             result=true;
         }catch(SQLException e){
             log.error("SQL Exception: insertarAntioquiaItrCatProP", e);
@@ -507,7 +508,7 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idAntReg);
             ps.setInt(i++ , idProp);
-            rs=ps.executeQuery();
+            ps.executeUpdate();
             result=true;
         }catch(SQLException e){
             log.error("SQL Exception: insertarAntioquiaItrRegProP", e);

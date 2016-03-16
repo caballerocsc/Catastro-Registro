@@ -35,8 +35,8 @@ public enum Sentencias {
         " (?,?,?,?,?,?,?) RETURNING registroid;"),
     INSERTARANTIOQUIAREGISTROPROP(" INSERT INTO reg_gobant_prop (registroid_registro_gobant,propietarioid_propietarios) VALUES\n" +
         " (?,?);"),
-    INSERTARANTIOQUIAITR("INSERT INTO itr_gobant (departamentoidfk,municipioifk,numpredio,predialcat,predialcat28,predialcat30,avaluo,corregimiento,circulo,matricula,areaterreno,areaconstruida,direccioncat,direccionreg,crpredial,crmatricula,crdireccion,crdocumento,crnombre,fecharecibido) VALUES\n" +
-        " (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING itrgobantid;"),
+    INSERTARANTIOQUIAITR("INSERT INTO itr_gobant (departamentoidfk,municipioifk,numpredio,predialcat,predialcat28,predialcat30,avaluo,corregimiento,circulo,matricula,areaterreno,areaconstruida,direccioncat,direccionreg,crpredial,crmatricula,crdireccion,crdocumento,crnombre,fecharecibido,tipopredio) VALUES\n" +
+        " (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING itrgobantid;"),
     INSERTARANTIOQUIAITRCATASTROPROP("INSERT INTO itr_catgobant_prop (itrgobantid_itr_gobant,propietarioid_propietarios) VALUES\n" +
         " (?,?);"),
     INSERTARANTIOQUIAITRREGISTROPROP("INSERT INTO itr_reggobant_prop (itrgobantid_itr_gobant,propietarioid_propietarios) VALUES\n" +

@@ -324,7 +324,7 @@ public class LeerExcel {
             List<Integer> ids=guardarPropietarios(separarPropietarios(propietario));
             int idCatastro=con.insertarAntioquiaCatastro(cat);
             for (Integer idProp : ids) {
-                if(!con.insertarAntioquiaItrCatProP(idCatastro, idProp))
+                if(!con.insertarAntioquiaCatProp(idCatastro, idProp))
                     log.error("No se puedo crear la relacion AntioquiaCatastro-propietario idCatastro: "+idCatastro+" idProp: "+idProp);
             }
         }
@@ -401,8 +401,8 @@ public class LeerExcel {
             itr.setCirculo(fila.get(i++));
             itr.setMatricula(fila.get(i++));
             itr.setTipopredio(fila.get(i++));
-            itr.setAreaterreno(Integer.parseInt(fila.get(i++)));
-            itr.setAreaconstruida(Integer.parseInt(fila.get(i++)));
+            itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
+            itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
             itr.setDireccioncat(fila.get(i++));
             itr.setDireccionreg(fila.get(i++));
             String propietarioCat=fila.get(i++);
@@ -414,13 +414,13 @@ public class LeerExcel {
             itr.setCrnombre(fila.get(i++));
             List<Integer> idsCat=guardarPropietarios(separarPropietarios(propietarioCat));
             List<Integer> idsReg=guardarPropietarios(separarPropietarios(propietarioReg));
-            int idITR=con.insertarIgacITR(itr);
+            int idITR=con.insertarAntioquiaITR(itr);
             for (Integer idProp : idsCat) {
-                if(!con.insertarIgacRegistroProp(idITR, idProp))
+                if(!con.insertarAntioquiaItrCatProP(idITR, idProp))
                     log.error("No se puedo crear la relacion ITRCat-propietario. idCatastro: "+idITR+" idProp: "+idProp);
             }
             for (Integer idProp : idsReg) {
-                if(!con.insertarIgacRegistroProp(idITR, idProp))
+                if(!con.insertarAntioquiaItrRegProP(idITR, idProp))
                     log.error("No se puedo crear la relacion ITRreg-propietario. idCatastro: "+idITR+" idProp: "+idProp);
             }
         }
@@ -463,7 +463,7 @@ public class LeerExcel {
             List<Integer> ids=guardarPropietarios(separarPropietarios(propietario));
             int idCatastro=con.insertarAntioquiaCatastro(cat);
             for (Integer idProp : ids) {
-                if(!con.insertarAntioquiaItrCatProP(idCatastro, idProp))
+                if(!con.insertarAntioquiaCatProp(idCatastro, idProp))
                     log.error("No se puedo crear la relacion Antioquia2015Catastro-propietario idCatastro: "+idCatastro+" idProp: "+idProp);
             }
         }
@@ -540,8 +540,8 @@ public class LeerExcel {
             itr.setCorregimiento(fila.get(i++));
             itr.setCirculo(fila.get(i++));
             itr.setMatricula(fila.get(i++));
-            itr.setAreaterreno(Integer.parseInt(fila.get(i++)));
-            itr.setAreaconstruida(Integer.parseInt(fila.get(i++)));
+            itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
+            itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
             itr.setDireccioncat(fila.get(i++));
             itr.setDireccionreg(fila.get(i++));
             String propietarioCat=fila.get(i++);
@@ -553,13 +553,13 @@ public class LeerExcel {
             itr.setCrnombre(fila.get(i++));
             List<Integer> idsCat=guardarPropietarios(separarPropietarios(propietarioCat));
             List<Integer> idsReg=guardarPropietarios(separarPropietarios(propietarioReg));
-            int idITR=con.insertarIgacITR(itr);
+            int idITR=con.insertarAntioquiaITR(itr);
             for (Integer idProp : idsCat) {
-                if(!con.insertarIgacRegistroProp(idITR, idProp))
+                if(!con.insertarAntioquiaItrCatProP(idITR, idProp))
                     log.error("No se puedo crear la relacion ITR2015Cat-propietario. idCatastro: "+idITR+" idProp: "+idProp);
             }
             for (Integer idProp : idsReg) {
-                if(!con.insertarIgacRegistroProp(idITR, idProp))
+                if(!con.insertarAntioquiaItrRegProP(idITR, idProp))
                     log.error("No se puedo crear la relacion ITR2015reg-propietario. idCatastro: "+idITR+" idProp: "+idProp);
             }
         }
@@ -587,10 +587,10 @@ public class LeerExcel {
             }
             Catastro cat=new Catastro();
             int i=0;
-            cat.setIdpredio(Integer.parseInt(fila.get(i++)));
+            cat.setIdpredio((int)Float.parseFloat(fila.get(i++)));
             cat.setNumpredio(fila.get(i++));
-            cat.setAreaterreno(Integer.parseInt(fila.get(i++)));
-            cat.setAreaconstruida(Integer.parseInt(fila.get(i++)));
+            cat.setAreaterreno(Float.parseFloat(fila.get(i++)));
+            cat.setAreaconstruida(Float.parseFloat(fila.get(i++)));
             cat.setDireccion(fila.get(i++));
             cat.setTipo(fila.get(i++));
             cat.setMunicipioidfk("05001");
@@ -654,12 +654,12 @@ public class LeerExcel {
             ITR itr=new ITR();
             int i=0;
             itr.setFecharecibido(fecharecibido);
-            itr.setIdpredio(Integer.parseInt(fila.get(i++)));
+            itr.setIdpredio((int)Float.parseFloat(fila.get(i++)));
             itr.setNumpredio(fila.get(i++));
             itr.setCirculo(fila.get(i++));
             itr.setMatricula(fila.get(i++));
-            itr.setAreaterreno(Integer.parseInt(fila.get(i++)));
-            itr.setAreaconstruida(Integer.parseInt(fila.get(i++)));
+            itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
+            itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
             itr.setDireccioncat(fila.get(i++));
             itr.setDireccionreg(fila.get(i++));
             itr.setTipopredio(fila.get(i++));

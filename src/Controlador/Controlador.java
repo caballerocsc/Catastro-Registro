@@ -54,11 +54,11 @@ public class Controlador {
     
     public boolean  cargarMedellin(JFileChooser chooser, String fecha){
         LeerExcel excel=new LeerExcel();
-        String[] archivos=chooser.getCurrentDirectory().list();
+        String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getCurrentDirectory().toString()+"/"+archivos[i];
+            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
             switch(tipo){
                 case "CAT":{
                     excel.medellinCatastro(new File(arch), fecha);
@@ -83,11 +83,11 @@ public class Controlador {
      
     public boolean  cargarAntioquia2014(JFileChooser chooser, String fecha){
         LeerExcel excel=new LeerExcel();
-        String[] archivos=chooser.getCurrentDirectory().list();
+        String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getCurrentDirectory().toString()+"/"+archivos[i];
+            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
             switch(tipo){
                 case "CAT":{
                     excel.gobAnt2014Catastro(new File(arch), fecha);
@@ -111,11 +111,11 @@ public class Controlador {
     
     public boolean  cargarAntioquia2015(JFileChooser chooser,String fecha){
         LeerExcel excel=new LeerExcel();
-        String[] archivos=chooser.getCurrentDirectory().list();
+        String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getCurrentDirectory().toString()+"/"+archivos[i];
+            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
             switch(tipo){
                 case "CAT":{
                     excel.gobAnt2015Catastro(new File(arch), fecha);
