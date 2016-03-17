@@ -90,7 +90,7 @@ public class LeerExcel {
                     resultado="";
             }
         }
-     return resultado;
+     return resultado.replace("'", "");
     }
     
     
@@ -134,7 +134,11 @@ public class LeerExcel {
         List<Integer> identificadores=new ArrayList<>();
         Consultas con=new Consultas();
         for (Propietario p : propietarios) {
-            identificadores.add(con.insertarPropietario(p));
+            int id=con.verificarPropietario(p);
+            if(id==0)
+                identificadores.add(con.insertarPropietario(p));
+            else 
+                identificadores.add(id);
         }
         return identificadores;
     }
@@ -142,533 +146,546 @@ public class LeerExcel {
     public String obtenerMunicipioNombre(File file){
         String nombre=file.getName();
         String[] temp=nombre.split("-");
-        return temp[1];
+        return temp[1].substring(0, 5);
     }
     
-    public boolean igacCatastro(File ruta,String fecha) {
+    public boolean igacCatastro(File ruta, String fecha) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASIGACCATASTRO);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                Catastro cat = new Catastro();
+                int i = 0;
+                cat.setNumpredio(fila.get(i++));
+                cat.setMunicipioidfk(fila.get(i++));
+                cat.setDepartamentoidfk(fila.get(1).substring(0, 2));
+                cat.setAvaluo(fila.get(i++));
+                cat.setSector(fila.get(i++));
+                cat.setManzana(fila.get(i++));
+                cat.setPredio(fila.get(i++));
+                cat.setPropiedad(fila.get(i++));
+                cat.setMatricula(fila.get(i++));
+                cat.setDireccion(fila.get(i++));
+                String propietario = fila.get(i++);
+                cat.setTipo(fila.get(i++));
+                cat.setEstado(fila.get(i++));
+                cat.setFecharecibido(fecha);
+                List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+                int idCatastro = con.insertarIgacCatastro(cat);
+                for (Integer idProp : ids) {
+                    if (!con.insertarIgacCatastroProp(idCatastro, idProp)) {
+                        log.error("No se puedo crear la relacion Catastro-propietario idCatastro: " + idCatastro + " idProp: " + idProp);
+                    }
+                }
             }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASIGACCATASTRO);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            Catastro cat=new Catastro();
-            int i=0;
-            cat.setNumpredio(fila.get(i++));
-            cat.setMunicipioidfk(fila.get(i++));
-            cat.setDepartamentoidfk(fila.get(1).substring(0, 2));
-            cat.setAvaluo(fila.get(i++));
-            cat.setSector(fila.get(i++));
-            cat.setManzana(fila.get(i++));
-            cat.setPredio(fila.get(i++));
-            cat.setPropiedad(fila.get(i++));
-            cat.setMatricula(fila.get(i++));
-            cat.setDireccion(fila.get(i++));
-            String propietario=fila.get(i++);
-            cat.setTipo(fila.get(i++));
-            cat.setEstado(fila.get(i++));
-            cat.setFecharecibido(fecha);
-            List<Integer> ids=guardarPropietarios(separarPropietarios(propietario));
-            int idCatastro=con.insertarIgacCatastro(cat);
-            for (Integer idProp : ids) {
-                if(!con.insertarIgacCatastroProp(idCatastro, idProp))
-                    log.error("No se puedo crear la relacion Catastro-propietario idCatastro: "+idCatastro+" idProp: "+idProp);
+
+        }
+        return true;
+    }
+    
+    public boolean igacRegistro(File ruta, String fecha) {
+        HSSFWorkbook wb = crearLibro(ruta);
+        Sheet sheet = wb.getSheetAt(0);
+        Consultas con = new Consultas();
+        int rowStart = 1;
+        int rowEnd = Math.max(2, sheet.getLastRowNum());
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
+            Row r = sheet.getRow(rowNum);
+            if (r == null) {
+                log.info("Fila vacia: " + rowNum);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASIGACREGISTRO);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                Registro reg = new Registro();
+                int i = 0;
+                String codMun = obtenerMunicipioNombre(ruta);
+                reg.setMunicipioidfk(codMun.substring(2));
+                reg.setMatriculaori(fila.get(i++));
+                reg.setPredialori(fila.get(i++));
+                reg.setDireccion(fila.get(i++));
+                String propietario = fila.get(i++);
+                reg.setTipo(fila.get(i++));
+                reg.setEstado(fila.get(i++));
+                reg.setFecharecibido(fecha);
+                List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+                int idRegistro = con.insertarIgacRegistro(reg);
+                for (Integer idProp : ids) {
+                    if (!con.insertarIgacRegistroProp(idRegistro, idProp)) {
+                        log.error("No se puedo crear la relacion Catastro-propietario idCatastro: " + idRegistro + " idProp: " + idProp);
+                    }
+                }
             }
         }
         return true;
     }
     
-    public boolean igacRegistro(File ruta,String fecha) {
+    public boolean igacITR(File ruta, String fecharecibido) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASIGACREGISTRO);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            Registro reg=new Registro();
-            int i=0;
-            String codMun=obtenerMunicipioNombre(ruta);
-            reg.setMunicipioidfk(codMun.substring(2));
-            reg.setMatriculaori(fila.get(i++));
-            reg.setPredialori(fila.get(i++));
-            reg.setDireccion(fila.get(i++));
-            String propietario=fila.get(i++);
-            reg.setTipo(fila.get(i++));
-            reg.setEstado(fila.get(i++));
-            reg.setFecharecibido(fecha);
-            List<Integer> ids=guardarPropietarios(separarPropietarios(propietario));
-            int idRegistro=con.insertarIgacRegistro(reg);
-            for (Integer idProp : ids) {
-                if(!con.insertarIgacRegistroProp(idRegistro, idProp))
-                    log.error("No se puedo crear la relacion Catastro-propietario idCatastro: "+idRegistro+" idProp: "+idProp);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASIGACITR);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                ITR itr = new ITR();
+                int i = 0;
+                String codMun = obtenerMunicipioNombre(ruta);
+                itr.setDepartamentoidfk(codMun.substring(0, 2));
+                itr.setMunicipioidfk(codMun.substring(2));
+                itr.setFecharecibido(fecharecibido);
+                itr.setNumpredio(fila.get(i++));
+                itr.setAvaluos(fila.get(i++));
+                itr.setSector(fila.get(i++));
+                itr.setManzana(fila.get(i++));
+                itr.setPredio(fila.get(i++));
+                itr.setPropiedad(fila.get(i++));
+                itr.setCirculo(fila.get(i++));
+                itr.setMatricula(fila.get(i++));
+                itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
+                itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
+                itr.setDireccioncat(fila.get(i++));
+                itr.setDireccionreg(fila.get(i++));
+                String propietarioCat = fila.get(i++);
+                String propietarioReg = fila.get(i++);
+                itr.setCrpredial(fila.get(i++));
+                itr.setCrmatricula(fila.get(i++));
+                itr.setCrdireccion(fila.get(i++));
+                itr.setCrdocumento(fila.get(i++));
+                itr.setCrnombre(fila.get(i++));
+                List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat));
+                List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg));
+                int idITR = con.insertarIgacITR(itr);
+                for (Integer idProp : idsCat) {
+                    if (!con.insertarIgacItrCatProp(idITR, idProp)) {
+                        log.error("No se puedo crear la relacion ITRCat-propietario. idCatastro: " + idITR + " idProp: " + idProp);
+                    }
+                }
+                for (Integer idProp : idsReg) {
+                    if (!con.insertarIgacItrRegProp(idITR, idProp)) {
+                        log.error("No se puedo crear la relacion ITRreg-propietario. idCatastro: " + idITR + " idProp: " + idProp);
+                    }
+                }
             }
         }
         return true;
     }
     
-    public boolean igacITR(File ruta,String fecharecibido) {
+    public boolean gobAnt2014Catastro(File ruta, String fecha) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASIGACITR);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            ITR itr=new ITR();
-            int i=0;
-            String codMun=obtenerMunicipioNombre(ruta);
-            itr.setDepartamentoidfk(codMun.substring(0, 2));
-            itr.setMunicipioidfk(codMun.substring(2));
-            itr.setFecharecibido(fecharecibido);
-            itr.setNumpredio(fila.get(i++));
-            itr.setAvaluos(fila.get(i++));
-            itr.setSector(fila.get(i++));
-            itr.setManzana(fila.get(i++));
-            itr.setPredio(fila.get(i++));
-            itr.setPropiedad(fila.get(i++));
-            itr.setCirculo(fila.get(i++));
-            itr.setMatricula(fila.get(i++));
-            itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
-            itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
-            itr.setDireccioncat(fila.get(i++));
-            itr.setDireccionreg(fila.get(i++));
-            String propietarioCat=fila.get(i++);
-            String propietarioReg=fila.get(i++);
-            itr.setCrpredial(fila.get(i++));
-            itr.setCrmatricula(fila.get(i++));
-            itr.setCrdireccion(fila.get(i++));
-            itr.setCrdocumento(fila.get(i++));
-            itr.setCrnombre(fila.get(i++));
-            List<Integer> idsCat=guardarPropietarios(separarPropietarios(propietarioCat));
-            List<Integer> idsReg=guardarPropietarios(separarPropietarios(propietarioReg));
-            int idITR=con.insertarIgacITR(itr);
-            for (Integer idProp : idsCat) {
-                if(!con.insertarIgacItrCatProp(idITR, idProp))
-                    log.error("No se puedo crear la relacion ITRCat-propietario. idCatastro: "+idITR+" idProp: "+idProp);
-            }
-            for (Integer idProp : idsReg) {
-                if(!con.insertarIgacItrRegProp(idITR, idProp))
-                    log.error("No se puedo crear la relacion ITRreg-propietario. idCatastro: "+idITR+" idProp: "+idProp);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2014CAT);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                Catastro cat = new Catastro();
+                int i = 0;
+                cat.setMunicipioidfk(fila.get(i++));
+                cat.setDepartamentoidfk(fila.get(0).substring(0, 2));
+                cat.setNumpredio(fila.get(i++));
+                cat.setPredialcat28(fila.get(i++));
+                cat.setPredialcat30(fila.get(i++));
+                cat.setMatricula(fila.get(i++));
+                cat.setTipo(fila.get(i++));
+                cat.setDireccion(fila.get(i++));
+                String propietario = fila.get(i++);
+                cat.setEstado(fila.get(i++));
+                cat.setFecharecibido(fecha);
+                List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+                int idCatastro = con.insertarAntioquiaCatastro(cat);
+                for (Integer idProp : ids) {
+                    if (!con.insertarAntioquiaCatProp(idCatastro, idProp)) {
+                        log.error("No se puedo crear la relacion AntioquiaCatastro-propietario idCatastro: " + idCatastro + " idProp: " + idProp);
+                    }
+                }
             }
         }
         return true;
     }
     
-    public boolean gobAnt2014Catastro(File ruta,String fecha) {
+    public boolean GobAnt2014Registro(File ruta, String fecha) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2014CAT);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            Catastro cat=new Catastro();
-            int i=0;
-            cat.setMunicipioidfk(fila.get(i++));
-            cat.setDepartamentoidfk(fila.get(0).substring(0, 2));
-            cat.setNumpredio(fila.get(i++));
-            cat.setPredialcat28(fila.get(i++));
-            cat.setPredialcat30(fila.get(i++));
-            cat.setMatricula(fila.get(i++));
-            cat.setTipo(fila.get(i++));
-            cat.setDireccion(fila.get(i++));
-            String propietario=fila.get(i++);
-            cat.setEstado(fila.get(i++));
-            cat.setFecharecibido(fecha);
-            List<Integer> ids=guardarPropietarios(separarPropietarios(propietario));
-            int idCatastro=con.insertarAntioquiaCatastro(cat);
-            for (Integer idProp : ids) {
-                if(!con.insertarAntioquiaCatProp(idCatastro, idProp))
-                    log.error("No se puedo crear la relacion AntioquiaCatastro-propietario idCatastro: "+idCatastro+" idProp: "+idProp);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2014REG);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                Registro reg = new Registro();
+                int i = 0;
+                String codMun = obtenerMunicipioNombre(ruta);
+                reg.setMunicipioidfk(codMun.substring(2));
+                reg.setMatriculaori(fila.get(i++));
+                reg.setPredialori(fila.get(i++));
+                reg.setTipo(fila.get(i++));
+                reg.setDireccion(fila.get(i++));
+                String propietario = fila.get(i++);
+                reg.setEstado(fila.get(i++));
+                reg.setFecharecibido(fecha);
+                List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+                int idRegistro = con.insertarAntioquiaRegistro(reg);
+                for (Integer idProp : ids) {
+                    if (!con.insertarAntioquiaRegProP(idRegistro, idProp)) {
+                        log.error("No se puedo crear la relacion AntReg-propietario idCatastro: " + idRegistro + " idProp: " + idProp);
+                    }
+                }
             }
         }
         return true;
     }
     
-    public boolean GobAnt2014Registro(File ruta,String fecha) {
+    public boolean gobAnt2014ITR(File ruta, String fecharecibido) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2014ITR);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                ITR itr = new ITR();
+                int i = 0;
+                itr.setMunicipioidfk(fila.get(i++));
+                itr.setDepartamentoidfk(fila.get(0).substring(0, 2));
+                itr.setFecharecibido(fecharecibido);
+                itr.setNumpredio(fila.get(i++));
+                itr.setPredialcat28(fila.get(i++));
+                itr.setPredialcat30(fila.get(i++));
+                itr.setCirculo(fila.get(i++));
+                itr.setMatricula(fila.get(i++));
+                itr.setTipopredio(fila.get(i++));
+                itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
+                itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
+                itr.setDireccioncat(fila.get(i++));
+                itr.setDireccionreg(fila.get(i++));
+                String propietarioCat = fila.get(i++);
+                String propietarioReg = fila.get(i++);
+                itr.setCrpredial(fila.get(i++));
+                itr.setCrmatricula(fila.get(i++));
+                itr.setCrdireccion(fila.get(i++));
+                itr.setCrdocumento(fila.get(i++));
+                itr.setCrnombre(fila.get(i++));
+                List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat));
+                List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg));
+                int idITR = con.insertarAntioquiaITR(itr);
+                for (Integer idProp : idsCat) {
+                    if (!con.insertarAntioquiaItrCatProP(idITR, idProp)) {
+                        log.error("No se puedo crear la relacion ITRCat-propietario. idCatastro: " + idITR + " idProp: " + idProp);
+                    }
+                }
+                for (Integer idProp : idsReg) {
+                    if (!con.insertarAntioquiaItrRegProP(idITR, idProp)) {
+                        log.error("No se puedo crear la relacion ITRreg-propietario. idCatastro: " + idITR + " idProp: " + idProp);
+                    }
+                }
             }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2014REG);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            Registro reg=new Registro();
-            int i=0;
-            String codMun=obtenerMunicipioNombre(ruta);
-            reg.setMunicipioidfk(codMun.substring(2));
-            reg.setMatriculaori(fila.get(i++));
-            reg.setPredialori(fila.get(i++));
-            reg.setTipo(fila.get(i++));
-            reg.setDireccion(fila.get(i++));
-            String propietario=fila.get(i++);
-            reg.setEstado(fila.get(i++));
-            reg.setFecharecibido(fecha);
-            List<Integer> ids=guardarPropietarios(separarPropietarios(propietario));
-            int idRegistro=con.insertarAntioquiaRegistro(reg);
-            for (Integer idProp : ids) {
-                if(!con.insertarAntioquiaRegProP(idRegistro, idProp))
-                    log.error("No se puedo crear la relacion AntReg-propietario idCatastro: "+idRegistro+" idProp: "+idProp);
+
+        }
+        return true;
+    }
+    
+        public boolean gobAnt2015Catastro(File ruta, String fecha) {
+        HSSFWorkbook wb = crearLibro(ruta);
+        Sheet sheet = wb.getSheetAt(0);
+        Consultas con = new Consultas();
+        int rowStart = 1;
+        int rowEnd = Math.max(2, sheet.getLastRowNum());
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
+            Row r = sheet.getRow(rowNum);
+            if (r == null) {
+                log.info("Fila vacia: " + rowNum);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2015CAT);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                Catastro cat = new Catastro();
+                int i = 0;
+                cat.setNumpredio(fila.get(i++));
+                cat.setMunicipioidfk(fila.get(i++));
+                cat.setDepartamentoidfk(fila.get(1).substring(0, 2));
+                cat.setAvaluo(fila.get(i++));
+                cat.setCorregimiento(fila.get(i++));
+                cat.setMatricula(fila.get(i++));
+                cat.setDireccion(fila.get(i++));
+                String propietario = fila.get(i++);
+                cat.setTipo(fila.get(i++));
+                cat.setEstado(fila.get(i++));
+                cat.setFecharecibido(fecha);
+                List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+                int idCatastro = con.insertarAntioquiaCatastro(cat);
+                for (Integer idProp : ids) {
+                    if (!con.insertarAntioquiaCatProp(idCatastro, idProp)) {
+                        log.error("No se puedo crear la relacion Antioquia2015Catastro-propietario idCatastro: " + idCatastro + " idProp: " + idProp);
+                    }
+                }
             }
         }
         return true;
     }
     
-    public boolean gobAnt2014ITR(File ruta,String fecharecibido) {
+    public boolean GobAnt2015Registro(File ruta, String fecha) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2014ITR);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            ITR itr=new ITR();
-            int i=0;
-            itr.setMunicipioidfk(fila.get(i++));
-            itr.setDepartamentoidfk(fila.get(0).substring(0, 2));
-            itr.setFecharecibido(fecharecibido);
-            itr.setNumpredio(fila.get(i++));
-            itr.setPredialcat28(fila.get(i++));
-            itr.setPredialcat30(fila.get(i++));
-            itr.setCirculo(fila.get(i++));
-            itr.setMatricula(fila.get(i++));
-            itr.setTipopredio(fila.get(i++));
-            itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
-            itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
-            itr.setDireccioncat(fila.get(i++));
-            itr.setDireccionreg(fila.get(i++));
-            String propietarioCat=fila.get(i++);
-            String propietarioReg=fila.get(i++);
-            itr.setCrpredial(fila.get(i++));
-            itr.setCrmatricula(fila.get(i++));
-            itr.setCrdireccion(fila.get(i++));
-            itr.setCrdocumento(fila.get(i++));
-            itr.setCrnombre(fila.get(i++));
-            List<Integer> idsCat=guardarPropietarios(separarPropietarios(propietarioCat));
-            List<Integer> idsReg=guardarPropietarios(separarPropietarios(propietarioReg));
-            int idITR=con.insertarAntioquiaITR(itr);
-            for (Integer idProp : idsCat) {
-                if(!con.insertarAntioquiaItrCatProP(idITR, idProp))
-                    log.error("No se puedo crear la relacion ITRCat-propietario. idCatastro: "+idITR+" idProp: "+idProp);
-            }
-            for (Integer idProp : idsReg) {
-                if(!con.insertarAntioquiaItrRegProP(idITR, idProp))
-                    log.error("No se puedo crear la relacion ITRreg-propietario. idCatastro: "+idITR+" idProp: "+idProp);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2015REG);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                Registro reg = new Registro();
+                int i = 0;
+                String codMun = obtenerMunicipioNombre(ruta);
+                reg.setMunicipioidfk(codMun.substring(2));
+                reg.setMatriculaori(fila.get(i++));
+                reg.setPredialori(fila.get(i++));
+                reg.setDireccion(fila.get(i++));
+                String propietario = fila.get(i++);
+                reg.setTipo(fila.get(i++));
+                reg.setEstado(fila.get(i++));
+                reg.setFecharecibido(fecha);
+                List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+                int idRegistro = con.insertarAntioquiaRegistro(reg);
+                for (Integer idProp : ids) {
+                    if (!con.insertarAntioquiaRegProP(idRegistro, idProp)) {
+                        log.error("No se puedo crear la relacion Ant2015Reg-propietario idCatastro: " + idRegistro + " idProp: " + idProp);
+                    }
+                }
             }
         }
         return true;
     }
     
-    
-    public boolean gobAnt2015Catastro(File ruta,String fecha) {
+    public boolean gobAnt2015ITR(File ruta, String fecharecibido) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2015CAT);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            Catastro cat=new Catastro();
-            int i=0;
-            cat.setNumpredio(fila.get(i++));
-            cat.setMunicipioidfk(fila.get(i++));
-            cat.setDepartamentoidfk(fila.get(1).substring(0, 2));
-            cat.setAvaluo(fila.get(i++));
-            cat.setCorregimiento(fila.get(i++));
-            cat.setMatricula(fila.get(i++));
-            cat.setDireccion(fila.get(i++));
-            String propietario=fila.get(i++);
-            cat.setTipo(fila.get(i++));
-            cat.setEstado(fila.get(i++));
-            cat.setFecharecibido(fecha);
-            List<Integer> ids=guardarPropietarios(separarPropietarios(propietario));
-            int idCatastro=con.insertarAntioquiaCatastro(cat);
-            for (Integer idProp : ids) {
-                if(!con.insertarAntioquiaCatProp(idCatastro, idProp))
-                    log.error("No se puedo crear la relacion Antioquia2015Catastro-propietario idCatastro: "+idCatastro+" idProp: "+idProp);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2015ITR);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                ITR itr = new ITR();
+                int i = 0;
+                itr.setFecharecibido(fecharecibido);
+                itr.setNumpredio(fila.get(i++));
+                itr.setPredialcat(fila.get(i++));
+                itr.setMunicipioidfk(fila.get(i++));
+                itr.setDepartamentoidfk(fila.get(2).substring(0, 2));
+                itr.setAvaluos(fila.get(i++));
+                itr.setCorregimiento(fila.get(i++));
+                itr.setCirculo(fila.get(i++));
+                itr.setMatricula(fila.get(i++));
+                itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
+                itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
+                itr.setDireccioncat(fila.get(i++));
+                itr.setDireccionreg(fila.get(i++));
+                String propietarioCat = fila.get(i++);
+                String propietarioReg = fila.get(i++);
+                itr.setCrpredial(fila.get(i++));
+                itr.setCrmatricula(fila.get(i++));
+                itr.setCrdireccion(fila.get(i++));
+                itr.setCrdocumento(fila.get(i++));
+                itr.setCrnombre(fila.get(i++));
+                List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat));
+                List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg));
+                int idITR = con.insertarAntioquiaITR(itr);
+                for (Integer idProp : idsCat) {
+                    if (!con.insertarAntioquiaItrCatProP(idITR, idProp)) {
+                        log.error("No se puedo crear la relacion ITR2015Cat-propietario. idCatastro: " + idITR + " idProp: " + idProp);
+                    }
+                }
+                for (Integer idProp : idsReg) {
+                    if (!con.insertarAntioquiaItrRegProP(idITR, idProp)) {
+                        log.error("No se puedo crear la relacion ITR2015reg-propietario. idCatastro: " + idITR + " idProp: " + idProp);
+                    }
+                }
             }
         }
         return true;
     }
     
-    public boolean GobAnt2015Registro(File ruta,String fecha) {
+    public boolean medellinCatastro(File ruta, String fecha) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2015REG);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            Registro reg=new Registro();
-            int i=0;
-            String codMun=obtenerMunicipioNombre(ruta);
-            reg.setMunicipioidfk(codMun.substring(2));
-            reg.setMatriculaori(fila.get(i++));
-            reg.setPredialori(fila.get(i++));
-            reg.setDireccion(fila.get(i++));
-            String propietario=fila.get(i++);
-            reg.setTipo(fila.get(i++));
-            reg.setEstado(fila.get(i++));
-            reg.setFecharecibido(fecha);
-            List<Integer> ids=guardarPropietarios(separarPropietarios(propietario));
-            int idRegistro=con.insertarAntioquiaRegistro(reg);
-            for (Integer idProp : ids) {
-                if(!con.insertarAntioquiaRegProP(idRegistro, idProp))
-                    log.error("No se puedo crear la relacion Ant2015Reg-propietario idCatastro: "+idRegistro+" idProp: "+idProp);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASMEDELLINCATASTRO);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                Catastro cat = new Catastro();
+                int i = 0;
+                cat.setIdpredio((int) Float.parseFloat(fila.get(i++)));
+                cat.setNumpredio(fila.get(i++));
+                cat.setAreaterreno(Float.parseFloat(fila.get(i++)));
+                cat.setAreaconstruida(Float.parseFloat(fila.get(i++)));
+                cat.setDireccion(fila.get(i++));
+                cat.setTipo(fila.get(i++));
+                cat.setMunicipioidfk("05001");
+                cat.setDepartamentoidfk("05");
+                cat.setFecharecibido(fecha);
+                con.insertarMedellinCatastro(cat);
             }
         }
         return true;
     }
     
-    public boolean gobAnt2015ITR(File ruta,String fecharecibido) {
+    public boolean medellinRegistro(File ruta, String fecha) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASGOBANT2015ITR);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            ITR itr=new ITR();
-            int i=0;
-            itr.setFecharecibido(fecharecibido);
-            itr.setNumpredio(fila.get(i++));
-            itr.setPredialcat(fila.get(i++));
-            itr.setMunicipioidfk(fila.get(i++));
-            itr.setDepartamentoidfk(fila.get(2).substring(0, 2));
-            itr.setAvaluos(fila.get(i++));
-            itr.setCorregimiento(fila.get(i++));
-            itr.setCirculo(fila.get(i++));
-            itr.setMatricula(fila.get(i++));
-            itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
-            itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
-            itr.setDireccioncat(fila.get(i++));
-            itr.setDireccionreg(fila.get(i++));
-            String propietarioCat=fila.get(i++);
-            String propietarioReg=fila.get(i++);
-            itr.setCrpredial(fila.get(i++));
-            itr.setCrmatricula(fila.get(i++));
-            itr.setCrdireccion(fila.get(i++));
-            itr.setCrdocumento(fila.get(i++));
-            itr.setCrnombre(fila.get(i++));
-            List<Integer> idsCat=guardarPropietarios(separarPropietarios(propietarioCat));
-            List<Integer> idsReg=guardarPropietarios(separarPropietarios(propietarioReg));
-            int idITR=con.insertarAntioquiaITR(itr);
-            for (Integer idProp : idsCat) {
-                if(!con.insertarAntioquiaItrCatProP(idITR, idProp))
-                    log.error("No se puedo crear la relacion ITR2015Cat-propietario. idCatastro: "+idITR+" idProp: "+idProp);
-            }
-            for (Integer idProp : idsReg) {
-                if(!con.insertarAntioquiaItrRegProP(idITR, idProp))
-                    log.error("No se puedo crear la relacion ITR2015reg-propietario. idCatastro: "+idITR+" idProp: "+idProp);
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASMEDELLINREGISTRO);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                Registro reg = new Registro();
+                int i = 0;
+                reg.setCirculo(fila.get(i++));
+                reg.setMatriculaori(fila.get(i++));
+                reg.setDireccion(fila.get(i++));
+                reg.setTipo(fila.get(i++));
+                reg.setFecharecibido(fecha);
+                con.insertarIgacRegistro(reg);
             }
         }
         return true;
     }
     
-    public boolean medellinCatastro(File ruta,String fecha) {
+    public boolean medellinITR(File ruta, String fecharecibido) {
         HSSFWorkbook wb = crearLibro(ruta);
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
+        Consultas con = new Consultas();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+        for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
-                break;
+            } else {
+                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASMEDELLINITR);
+                List<String> fila = new ArrayList<>();
+                for (int cn = 0; cn < lastColumn; cn++) {
+                    Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
+                    String celda = obtenerCelda(c, r);
+                    fila.add(celda);
+                }
+                ITR itr = new ITR();
+                int i = 0;
+                itr.setFecharecibido(fecharecibido);
+                itr.setIdpredio((int) Float.parseFloat(fila.get(i++)));
+                itr.setNumpredio(fila.get(i++));
+                itr.setCirculo(fila.get(i++));
+                itr.setMatricula(fila.get(i++));
+                itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
+                itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
+                itr.setDireccioncat(fila.get(i++));
+                itr.setDireccionreg(fila.get(i++));
+                itr.setTipopredio(fila.get(i++));
+                itr.setCrpredial(fila.get(i++));
+                itr.setCrmatricula(fila.get(i++));
+                itr.setCrdireccion(fila.get(i++));
+                itr.setCrdocumento(fila.get(i++));
+                itr.setCrnombre(fila.get(i++));
+                con.insertarIgacITR(itr);
             }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASMEDELLINCATASTRO);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            Catastro cat=new Catastro();
-            int i=0;
-            cat.setIdpredio((int)Float.parseFloat(fila.get(i++)));
-            cat.setNumpredio(fila.get(i++));
-            cat.setAreaterreno(Float.parseFloat(fila.get(i++)));
-            cat.setAreaconstruida(Float.parseFloat(fila.get(i++)));
-            cat.setDireccion(fila.get(i++));
-            cat.setTipo(fila.get(i++));
-            cat.setMunicipioidfk("05001");
-            cat.setDepartamentoidfk("05");
-            cat.setFecharecibido(fecha);
-            con.insertarMedellinCatastro(cat);
-        }
-        return true;
-    }
-    
-    public boolean medellinRegistro(File ruta,String fecha) {
-        HSSFWorkbook wb = crearLibro(ruta);
-        Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
-        int rowStart = 1;
-        int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
-            Row r = sheet.getRow(rowNum);
-            if (r == null) {
-                log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASMEDELLINREGISTRO);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            Registro reg=new Registro();
-            int i=0;
-            reg.setCirculo(fila.get(i++));
-            reg.setMatriculaori(fila.get(i++));
-            reg.setDireccion(fila.get(i++));
-            reg.setTipo(fila.get(i++));
-            reg.setFecharecibido(fecha);
-            con.insertarIgacRegistro(reg);
-        }
-        return true;
-    }
-    
-    public boolean medellinITR(File ruta,String fecharecibido) {
-        HSSFWorkbook wb = crearLibro(ruta);
-        Sheet sheet = wb.getSheetAt(0);
-        Consultas con=new Consultas();
-        int rowStart = 1;
-        int rowEnd = Math.max(2, sheet.getLastRowNum());
-        for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
-            Row r = sheet.getRow(rowNum);
-            if (r == null) {
-                log.info("Fila vacia: " + rowNum);
-                break;
-            }
-            int lastColumn = Math.max(r.getLastCellNum(), COLUMNASMEDELLINITR);
-            List<String> fila=new ArrayList<>();
-            for (int cn = 0; cn < lastColumn; cn++) {
-                Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
-                String celda=obtenerCelda(c, r);
-                fila.add(celda);
-            }
-            ITR itr=new ITR();
-            int i=0;
-            itr.setFecharecibido(fecharecibido);
-            itr.setIdpredio((int)Float.parseFloat(fila.get(i++)));
-            itr.setNumpredio(fila.get(i++));
-            itr.setCirculo(fila.get(i++));
-            itr.setMatricula(fila.get(i++));
-            itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
-            itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));
-            itr.setDireccioncat(fila.get(i++));
-            itr.setDireccionreg(fila.get(i++));
-            itr.setTipopredio(fila.get(i++));
-            itr.setCrpredial(fila.get(i++));
-            itr.setCrmatricula(fila.get(i++));
-            itr.setCrdireccion(fila.get(i++));
-            itr.setCrdocumento(fila.get(i++));
-            itr.setCrnombre(fila.get(i++));
-            con.insertarIgacITR(itr);
         }
         return true;
     }

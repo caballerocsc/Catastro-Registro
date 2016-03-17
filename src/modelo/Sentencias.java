@@ -47,7 +47,7 @@ public enum Sentencias {
         " (?,?,?,?) RETURNING registromedid;"),
     INSERTARMEDELLINITR("INSERT INTO itr_medellin (idpredio,numpredio,matricula,areaterreno,areaconstruida,direccioncat,direccionreg,tipopredio,crpredial,crmatricula,crdireccion,crdocumento,crnombre,fecharecibido) VALUES\n" +
         " (?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING itrmedid;"),
-    VERIFICARPROPIETARIO("select propietarioid from propietarios where tipodoc like ? and numdoc like ?"),
+    VERIFICARPROPIETARIO("select propietarioid from propietarios where tipodoc like ? and numdoc like ? and nombrepropietario like ?"),
     INSERTARPROPIETARIO("INSERT INTO propietarios (tipodoc,numdoc,nombrepropietario) VALUES\n" +
         " (?,?,?) RETURNING propietarioid;");
     

@@ -33,18 +33,16 @@ public class Consultas {
         ResultSet rs=null;
         Connection cn=con.getConexion();
         Sentencias sbd=Sentencias.VERIFICARPROPIETARIO;
+        int id=0;
         try{
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setString(1 , p.getTipoDoc());
             ps.setString(2 , p.getNumDoc());
+            ps.setString(3, p.getNombrePropietario());
             rs=ps.executeQuery();
-            int id=0;
             while(rs.next()){
                 id=rs.getInt(1);
             }
-            if(id!=0)
-                return id;
-            
         }catch(SQLException e){
             log.error("SQL Exception:verificarPropietario", e);
         }finally{
@@ -52,7 +50,7 @@ public class Consultas {
             con.cerrar(ps);
             con.cerrar(rs);
         }
-       return 0; 
+       return id; 
     }
     
     public int insertarPropietario(Propietario p){
@@ -615,4 +613,6 @@ public class Consultas {
         }
        return id;
     }
+    
+    
 }
