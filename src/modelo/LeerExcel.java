@@ -29,18 +29,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 public class LeerExcel {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LeerExcel.class);
-    private static final int COLUMNASIGACCATASTRO=12;
-    private static final int COLUMNASIGACREGISTRO=6;
-    private static final int COLUMNASIGACITR=19;
-    private static final int COLUMNASGOBANT2014CAT=9;
-    private static final int COLUMNASGOBANT2014REG=6;
-    private static final int COLUMNASGOBANT2014ITR=18;
-    private static final int COLUMNASGOBANT2015CAT=9;
-    private static final int COLUMNASGOBANT2015REG=6;
-    private static final int COLUMNASGOBANT2015ITR=18;
-    private static final int COLUMNASMEDELLINCATASTRO=6;
-    private static final int COLUMNASMEDELLINREGISTRO=4;
-    private static final int COLUMNASMEDELLINITR=14;
+    
     
     public LeerExcel() {
     }
@@ -94,65 +83,15 @@ public class LeerExcel {
     }
     
     
-    public List<Propietario> separarPropietarios(String p) {
-        List<Propietario> listaProp = new ArrayList<>();
-        if (!p.equals("")) {
-            String[] arrayProp = p.split("--");//separar multiples propietarios
-            for (int i = 0; i < arrayProp.length; i++) {
-                Propietario prop = new Propietario();
-                String tipoDoc = arrayProp[i].substring(0, 2);//obtener el  tipo de documento
-                prop.setTipoDoc(tipoDoc);
-                String[] datosProp = arrayProp[i].split("-");//
-                switch (tipoDoc) {
-                    case "NI": {
-                        //el NI puede contener guiones en el numero de documento
-                        //el nombre se encuentra en la ultima posicion del arreglo
-                        prop.setNombrePropietario(datosProp[datosProp.length - 1].trim());
-                        String temp = "";
-                        //el numero de documento esta fraccionado, por ello se concatena 
-                        //y se omite el tipo de documento
-                        for (int j = 0; j < datosProp.length - 1; j++) {
-                            temp = temp.concat(datosProp[j]);
-                        }
-                        prop.setNumDoc((temp.substring(2)).trim());
-                        break;
-                    }
-                    default:
-                        //los demas tipos de documentos no contienen guiones
-                        prop.setNombrePropietario(datosProp[1].trim());
-                        prop.setNumDoc((datosProp[0].substring(2)).trim());
-                        break;
-                }
-                listaProp.add(prop);
-            }
-        }else
-            log.warn("El propietario se encuentra vacio");
-        return listaProp;
-    }
-    
-    public List<Integer> guardarPropietarios(List<Propietario> propietarios){
-        List<Integer> identificadores=new ArrayList<>();
-        Consultas con=new Consultas();
-        for (Propietario p : propietarios) {
-            int id=con.verificarPropietario(p);
-            if(id==0)
-                identificadores.add(con.insertarPropietario(p));
-            else 
-                identificadores.add(id);
-        }
-        return identificadores;
-    }
-    
     public String obtenerMunicipioNombre(File file){
         String nombre=file.getName();
         String[] temp=nombre.split("-");
         return temp[1].substring(0, 5);
     }
     
-    public boolean igacCatastro(File ruta, String fecha) {
-        HSSFWorkbook wb = crearLibro(ruta);
+    public List<String> leerXLS(HSSFWorkbook wb, String fecha, int numColumnas) {
         Sheet sheet = wb.getSheetAt(0);
-        Consultas con = new Consultas();
+        List<String> fila = new ArrayList<>();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
@@ -160,40 +99,16 @@ public class LeerExcel {
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
             } else {
-                int lastColumn = Math.max(r.getLastCellNum(), COLUMNASIGACCATASTRO);
-                List<String> fila = new ArrayList<>();
+                int lastColumn = Math.max(r.getLastCellNum(), numColumnas);
                 for (int cn = 0; cn < lastColumn; cn++) {
                     Cell c = r.getCell(cn, Row.RETURN_BLANK_AS_NULL);
                     String celda = obtenerCelda(c, r);
                     fila.add(celda);
                 }
-                Catastro cat = new Catastro();
-                int i = 0;
-                cat.setNumpredio(fila.get(i++));
-                cat.setMunicipioidfk(fila.get(i++));
-                cat.setDepartamentoidfk(fila.get(1).substring(0, 2));
-                cat.setAvaluo(fila.get(i++));
-                cat.setSector(fila.get(i++));
-                cat.setManzana(fila.get(i++));
-                cat.setPredio(fila.get(i++));
-                cat.setPropiedad(fila.get(i++));
-                cat.setMatricula(fila.get(i++));
-                cat.setDireccion(fila.get(i++));
-                String propietario = fila.get(i++);
-                cat.setTipo(fila.get(i++));
-                cat.setEstado(fila.get(i++));
-                cat.setFecharecibido(fecha);
-                List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
-                int idCatastro = con.insertarIgacCatastro(cat);
-                for (Integer idProp : ids) {
-                    if (!con.insertarIgacCatastroProp(idCatastro, idProp)) {
-                        log.error("No se puedo crear la relacion Catastro-propietario idCatastro: " + idCatastro + " idProp: " + idProp);
-                    }
-                }
+                fila.add(fecha);
             }
-
         }
-        return true;
+        return fila;
     }
     
     public boolean igacRegistro(File ruta, String fecha) {
