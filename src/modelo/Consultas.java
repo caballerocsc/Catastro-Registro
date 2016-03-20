@@ -205,7 +205,7 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(i++ , idCat);
             ps.setInt(i++ , idProp);
-            System.out.println("consulta: "+ps.toString());
+            //System.out.println("consulta: "+ps.toString());
             ps.executeUpdate();
             result=true;
         }catch(SQLException e){

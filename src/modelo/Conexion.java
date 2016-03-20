@@ -24,7 +24,7 @@ public class Conexion {
     }
 
     String driver = "org.postgresql.Driver";
-    String connectString = "jdbc:postgresql://localhost:5432/cata_reg";
+    String connectString = "jdbc:postgresql://localhost:5432/cata2";
     String user = "postgres";
     String password = "123456";
 

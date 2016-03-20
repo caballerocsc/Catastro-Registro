@@ -8,7 +8,6 @@ package Controlador;
 
 import java.io.File;
 import javax.swing.JFileChooser;
-import modelo.LeerExcel;
 
 /**
  *
@@ -19,28 +18,32 @@ public class Controlador {
     
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Controlador.class);
     
+    
+    
     public Controlador() {
     }
     
     
     public boolean  cargarIgac(JFileChooser chooser, String fecha){
-        LeerExcel excel=new LeerExcel();
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
+            File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
+            Orquestador o = new Orquestador();
             switch(tipo){
                 case "CAT":{
-                    excel.igacCatastro(new File(arch), fecha);
+                    //excel.igacCatastro(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASIGACCATASTRO, Parametros.IGACCATASTRO);
                     break;
                 }
                 case "REG":{
-                    excel.igacRegistro(new File(arch), fecha);
+                    //excel.igacRegistro(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASIGACREGISTRO,Parametros.IGACREGISTRO );
                     break;
                 }
                 case "ITR":{
-                    excel.igacITR(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASIGACITR,Parametros.IGACITR);
                     break;
                 }
                 default:{
@@ -53,23 +56,23 @@ public class Controlador {
     }
     
     public boolean  cargarMedellin(JFileChooser chooser, String fecha){
-        LeerExcel excel=new LeerExcel();
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
+            File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
+            Orquestador o = new Orquestador();
             switch(tipo){
                 case "CAT":{
-                    excel.medellinCatastro(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASMEDELLINCATASTRO, Parametros.MEDELLINCAT);
                     break;
                 }
                 case "REG":{
-                    excel.medellinRegistro(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASMEDELLINREGISTRO, Parametros.MEDELLINREG);
                     break;
                 }
                 case "ITR":{
-                    excel.medellinITR(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASMEDELLINITR, Parametros.MEDELLINITR);
                     break;
                 }
                 default:{
@@ -82,23 +85,23 @@ public class Controlador {
     }
      
     public boolean  cargarAntioquia2014(JFileChooser chooser, String fecha){
-        LeerExcel excel=new LeerExcel();
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
+            File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
+            Orquestador o = new Orquestador();
             switch(tipo){
                 case "CAT":{
-                    excel.gobAnt2014Catastro(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2014CAT, Parametros.GOBANT2014CAT);
                     break;
                 }
                 case "REG":{
-                    excel.GobAnt2014Registro(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2014REG, Parametros.GOBANT2014REG);
                     break;
                 }
                 case "ITR":{
-                    excel.gobAnt2014ITR(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2014ITR, Parametros.GOBANT2014ITR);
                     break;
                 }
                 default:{
@@ -110,23 +113,23 @@ public class Controlador {
     }
     
     public boolean  cargarAntioquia2015(JFileChooser chooser,String fecha){
-        LeerExcel excel=new LeerExcel();
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
+            File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
+            Orquestador o = new Orquestador();
             switch(tipo){
                 case "CAT":{
-                    excel.gobAnt2015Catastro(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2015CAT, Parametros.GOBANT2015CAT);
                     break;
                 }
                 case "REG":{
-                    excel.GobAnt2015Registro(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2015REG, Parametros.GOBANT2015REG);
                     break;
                 }
                 case "ITR":{
-                    excel.gobAnt2015ITR(new File(arch), fecha);
+                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2015ITR, Parametros.GOBANT2015ITR);
                     break;
                 }
                 default:{
@@ -136,4 +139,6 @@ public class Controlador {
         }
         return false;
     }
+    
+    
 }
