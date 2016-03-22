@@ -38,7 +38,7 @@ public class LeerArchivo {
         } else {
             CellReference cellRef = new CellReference(r.getRowNum(), c.getColumnIndex());
             log.info(cellRef.formatAsString());
-            log.info(" - ");
+//            log.info(" - ");
             switch (c.getCellType()) {
                 case Cell.CELL_TYPE_STRING:
 //                    log.info(c.getRichStringCellValue().getString());
@@ -69,6 +69,7 @@ public class LeerArchivo {
     }
 
     public void leerXLSX(XSSFWorkbook wb, String fecha, int numColumnas, int useCase, String nomArchivo) {
+        log.info("Creando archivo XLSX para: "+nomArchivo);
         Sheet sheet = wb.getSheetAt(0);
         List<String> fila = new ArrayList<>();
         int rowStart = 1;
@@ -91,6 +92,7 @@ public class LeerArchivo {
     }
 
     public void leerXLS(HSSFWorkbook wb, String fecha, int numColumnas, int useCase, String nomArchivo) {
+        log.info("Creando archivo XLS para: "+nomArchivo);
         Sheet sheet = wb.getSheetAt(0);
         List<String> fila = new ArrayList<>();
         int rowStart = 1;
@@ -113,6 +115,7 @@ public class LeerArchivo {
     }
 
     public void leerArchivoPlano(File file, String fecha, int numColumnas, int useCase, String nomArchivo) {
+        log.info("Creando archivo TXT para: "+nomArchivo);
         FileReader f = null;
         try {
             String cadena;
@@ -137,7 +140,7 @@ public class LeerArchivo {
                     vacias++;
                     log.info("Fila vacia: "+j);
                 }
-                if (vacias==10) {//si se encuentra 10 celdas vacias termine el proceso en vez de leer todas las filas vacias
+                if (vacias==10) {//si se encuentra 10 celdas vacias seguidas, termina el proceso en vez de leer todas las filas vacias
                     break;
                 }
                 j++;
@@ -207,7 +210,7 @@ public class LeerArchivo {
                 break;
             }
             default: {
-                log.error("Leer XLS: no entro a ningun caso");
+                log.error("NO entro a ningun caso del metodo seleccionarTabla");
             }
         }
     }

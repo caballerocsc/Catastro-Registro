@@ -5,7 +5,6 @@
  */
 package modelo;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import obj.Catastro;
@@ -25,6 +24,7 @@ public class Mapeo {
     }
 
     public List<Propietario> separarPropietarios(String p) {
+        log.info("Separando Propietarios");
         List<Propietario> listaProp = new ArrayList<>();
         if (!p.equals("")) {
             String[] arrayProp = p.split("--");//separar multiples propietarios
@@ -62,6 +62,7 @@ public class Mapeo {
     }
 
     public List<Integer> guardarPropietarios(List<Propietario> propietarios) {
+        log.info("Guardando propietarios");
         List<Integer> identificadores = new ArrayList<>();
         Consultas con = new Consultas();
         for (Propietario p : propietarios) {
@@ -76,11 +77,13 @@ public class Mapeo {
     }
 
     public String obtenerMunicipioNombre(String nombre) {
+        log.info("Obtener Nombre Municipios");
         String[] temp = nombre.split("-");
         return temp[1].substring(0, 5);
     }
 
     public void mapeoIgacCatastro(List<String> fila) {
+        log.info("mapeoIgacCatastro");
         Consultas con = new Consultas();
         Catastro cat = new Catastro();
         int i = 0;
@@ -108,6 +111,7 @@ public class Mapeo {
     }
 
     public void mapeoIgacRegistro(List<String> fila, String nomArchivo) {
+        log.info("mapeoIgacRegistro");
         Registro reg = new Registro();
         Consultas con = new Consultas();
         int i = 0;
@@ -130,6 +134,7 @@ public class Mapeo {
     }
 
     public void mapeoIgacITR(List<String> fila, String nomArch) {
+        log.info("mapeoIgacITR");
         Consultas con = new Consultas();
         ITR itr = new ITR();
         int i = 0;
@@ -172,6 +177,7 @@ public class Mapeo {
     }
 
     public void mapeoGobAnt2014Catastro(List<String> fila) {
+        log.info("mapeoGobAnt2014Catastro");
         Catastro cat = new Catastro();
         Consultas con = new Consultas();
         int i = 0;
@@ -196,6 +202,7 @@ public class Mapeo {
     }
 
     public void mapeoGobAnt2014Registro(List<String> fila, String nomArch) {
+        log.info("mapeoGobAnt2014Registro");
         Consultas con = new Consultas();
         Registro reg = new Registro();
         int i = 0;
@@ -218,6 +225,7 @@ public class Mapeo {
     }
 
     public void mapeoGobAnt2014ITR(List<String> fila) {
+        log.info("mapeoGobAnt2014ITR");
         ITR itr = new ITR();
         Consultas con = new Consultas();
         int i = 0;
@@ -257,6 +265,7 @@ public class Mapeo {
     }
 
     public void mapeoGobAnt2015Catastro(List<String> fila) {
+        log.info("mapeoGobAnt2015Catastro");
         Catastro cat = new Catastro();
         Consultas con = new Consultas();
         int i = 0;
@@ -281,6 +290,7 @@ public class Mapeo {
     }
 
     public void mapeoGobAnt2015Registro(List<String> fila, String nomArch) {
+        log.info("mapeoGobAnt2015Registro");
         Consultas con = new Consultas();
         Registro reg = new Registro();
         int i = 0;
@@ -303,6 +313,7 @@ public class Mapeo {
     }
 
     public void mapeoGobAnt2015ITR(List<String> fila) {
+        log.info("mapeoGobAnt2015ITR");
         ITR itr = new ITR();
         Consultas con = new Consultas();
         int i = 0;
@@ -342,6 +353,7 @@ public class Mapeo {
     }
 
     public void mapeoMedellinCatastro(List<String> fila) {
+        log.info("mapeoMedellinCatastro");
         Consultas con = new Consultas();
         Catastro cat = new Catastro();
         int i = 0;
@@ -358,6 +370,7 @@ public class Mapeo {
     }
 
     public void mapeoMedellinRegistro(List<String> fila) {
+        log.info("mapeoMedellinRegistro");
         Consultas con = new Consultas();
         Registro reg = new Registro();
         int i = 0;
@@ -370,6 +383,7 @@ public class Mapeo {
     }
 
     public void mapeoMedellinITR(List<String> fila) {
+        log.info("mapeoMedellinITR");
         Consultas con = new Consultas();
         ITR itr = new ITR();
         int i = 0;

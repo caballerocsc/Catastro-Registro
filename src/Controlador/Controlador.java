@@ -25,29 +25,33 @@ public class Controlador {
     
     
     public boolean  cargarIgac(JFileChooser chooser, String fecha){
+        log.info("Método CargarIgac");
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
             File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
-            Orquestador o = new Orquestador();
             switch(tipo){
                 case "CAT":{
-                    //excel.igacCatastro(new File(arch), fecha);
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASIGACCATASTRO, Parametros.IGACCATASTRO);
+                    log.info("Método CargarIgac CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASIGACCATASTRO, Parametros.IGACCATASTRO);
+                    o.start();
                     break;
                 }
                 case "REG":{
-                    //excel.igacRegistro(new File(arch), fecha);
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASIGACREGISTRO,Parametros.IGACREGISTRO );
+                    log.info("Método CargarREG");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASIGACREGISTRO,Parametros.IGACREGISTRO );
+                    o.start();
                     break;
                 }
                 case "ITR":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASIGACITR,Parametros.IGACITR);
+                    log.info("Método CargarITR");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASIGACITR,Parametros.IGACITR);
+                    o.start();
                     break;
                 }
                 default:{
-                    log.error("El nombre del archivo esta mal formado y no fue leído: "+tipo);
+                    log.error("El nombre del archivo esta mal formado y no fue leído: "+doc.getName());
                 }
             }
             
@@ -61,22 +65,27 @@ public class Controlador {
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
             File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
-            Orquestador o = new Orquestador();
             switch(tipo){
                 case "CAT":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASMEDELLINCATASTRO, Parametros.MEDELLINCAT);
+                    log.info("Método CargarMedellin CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASMEDELLINCATASTRO, Parametros.MEDELLINCAT);
+                    o.start();
                     break;
                 }
                 case "REG":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASMEDELLINREGISTRO, Parametros.MEDELLINREG);
+                    log.info("Método CargaMedellinREG");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASMEDELLINREGISTRO, Parametros.MEDELLINREG);
+                    o.start();
                     break;
                 }
                 case "ITR":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASMEDELLINITR, Parametros.MEDELLINITR);
+                    log.info("Método CargarMedellinITR");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASMEDELLINITR, Parametros.MEDELLINITR);
+                    o.run();
                     break;
                 }
                 default:{
-                    log.error("El nombre del archivo esta mal formado y no fue leído");
+                    log.error("El nombre del archivo esta mal formado y no fue leído: "+doc.getName());
                 }
             }
             
@@ -90,22 +99,27 @@ public class Controlador {
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
             File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
-            Orquestador o = new Orquestador();
             switch(tipo){
                 case "CAT":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2014CAT, Parametros.GOBANT2014CAT);
+                    log.info("Método CargarAntioquia2014CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2014CAT, Parametros.GOBANT2014CAT);
+                    o.start();
                     break;
                 }
                 case "REG":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2014REG, Parametros.GOBANT2014REG);
+                    log.info("Método CargarAntioquia2014REG");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2014REG, Parametros.GOBANT2014REG);
+                    o.start();
                     break;
                 }
                 case "ITR":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2014ITR, Parametros.GOBANT2014ITR);
+                    log.info("Método CargarAntioquia2014ITR");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2014ITR, Parametros.GOBANT2014ITR);
+                    o.start();
                     break;
                 }
                 default:{
-                    log.error("El nombre del archivo esta mal formado y no fue leído");
+                    log.error("El nombre del archivo esta mal formado y no fue leído: "+doc.getName());
                 }
             }
         }
@@ -118,22 +132,27 @@ public class Controlador {
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
             File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
-            Orquestador o = new Orquestador();
             switch(tipo){
                 case "CAT":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2015CAT, Parametros.GOBANT2015CAT);
+                    log.info("Método CargarAntioquia2015CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2015CAT, Parametros.GOBANT2015CAT);
+                    o.start();
                     break;
                 }
                 case "REG":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2015REG, Parametros.GOBANT2015REG);
+                    log.info("Método CargarAntioquia2015CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2015REG, Parametros.GOBANT2015REG);
+                    o.start();
                     break;
                 }
                 case "ITR":{
-                    o.seleccionarMetodo(doc, fecha, Parametros.COLUMNASGOBANT2015ITR, Parametros.GOBANT2015ITR);
+                    log.info("Método CargarAntioquia2015CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2015ITR, Parametros.GOBANT2015ITR);
+                    o.start();
                     break;
                 }
                 default:{
-                    log.error("El nombre del archivo esta mal formado y no fue leído");
+                    log.error("El nombre del archivo esta mal formado y no fue leído: "+doc.getName());
                 }
             }
         }

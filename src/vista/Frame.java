@@ -20,8 +20,6 @@ public class Frame extends javax.swing.JFrame {
      * Creates new form Frame
      */
     
-    private long tInicio;
-    private long tFinal;
     
     public Frame() {
         initComponents();
@@ -124,7 +122,6 @@ public class Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BigacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BigacActionPerformed
-        tInicio=System.currentTimeMillis();
         Controlador c=new Controlador();
         String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
         JFileChooser jFileChooser2;
@@ -132,11 +129,9 @@ public class Frame extends javax.swing.JFrame {
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
         jFileChooser2.showOpenDialog(this);
         c.cargarIgac(jFileChooser2, fecha);
-        System.out.println(calcularTiempo());
     }//GEN-LAST:event_BigacActionPerformed
 
     private void BmedellinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BmedellinActionPerformed
-        tInicio=System.currentTimeMillis();
         Controlador c=new Controlador();
         String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
         JFileChooser jFileChooser2;
@@ -144,11 +139,9 @@ public class Frame extends javax.swing.JFrame {
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
         jFileChooser2.showOpenDialog(this);
         c.cargarMedellin(jFileChooser2, fecha);
-        System.out.println(calcularTiempo());
     }//GEN-LAST:event_BmedellinActionPerformed
 
     private void Bantioquia14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bantioquia14ActionPerformed
-        tInicio=System.currentTimeMillis();
         Controlador c=new Controlador();
         String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
         JFileChooser jFileChooser2;
@@ -156,11 +149,9 @@ public class Frame extends javax.swing.JFrame {
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
         jFileChooser2.showOpenDialog(this);
         c.cargarAntioquia2014(jFileChooser2, fecha);
-        System.out.println(calcularTiempo());
     }//GEN-LAST:event_Bantioquia14ActionPerformed
 
     private void Bantioquia15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bantioquia15ActionPerformed
-        tInicio=System.currentTimeMillis();
         Controlador c=new Controlador();
         String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
         JFileChooser jFileChooser2;
@@ -168,12 +159,8 @@ public class Frame extends javax.swing.JFrame {
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
         jFileChooser2.showOpenDialog(this);
         c.cargarAntioquia2015(jFileChooser2, fecha);
-        System.out.println(calcularTiempo());
     }//GEN-LAST:event_Bantioquia15ActionPerformed
 
-    public String calcularTiempo(){
-        return (System.currentTimeMillis()-tInicio)/1000+"";
-    }
     /**
      * @param args the command line arguments
      */
