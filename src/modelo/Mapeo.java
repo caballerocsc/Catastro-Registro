@@ -23,11 +23,15 @@ public class Mapeo {
     public Mapeo() {
     }
 
-    public List<Propietario> separarPropietarios(String p) {
+    public List<Propietario> separarPropietarios(String p, int tipo) {
         log.info("Separando Propietarios");
         List<Propietario> listaProp = new ArrayList<>();
         if (!p.equals("")) {
-            String[] arrayProp = p.split("--");//separar multiples propietarios
+            String[] arrayProp;
+            if(tipo==1)
+                arrayProp = p.split("--");//separar multiples propietarios
+            else
+                arrayProp = p.split("\r\n");
             for (int i = 0; i < arrayProp.length; i++) {
                 Propietario prop = new Propietario();
                 String tipoDoc = arrayProp[i].substring(0, 2);//obtener el  tipo de documento
@@ -101,7 +105,7 @@ public class Mapeo {
         cat.setTipo(fila.get(i++));
         cat.setEstado(fila.get(i++));
         cat.setFecharecibido(fila.get(i++));
-        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario,1));
         int idCatastro = con.insertarIgacCatastro(cat);
         for (Integer idProp : ids) {
             if (!con.insertarIgacCatastroProp(idCatastro, idProp)) {
@@ -124,7 +128,7 @@ public class Mapeo {
         reg.setTipo(fila.get(i++));
         reg.setEstado(fila.get(i++));
         reg.setFecharecibido(fila.get(i++));
-        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario,1));
         int idRegistro = con.insertarIgacRegistro(reg);
         for (Integer idProp : ids) {
             if (!con.insertarIgacRegistroProp(idRegistro, idProp)) {
@@ -161,8 +165,8 @@ public class Mapeo {
         itr.setCrdocumento(fila.get(i++));
         itr.setCrnombre(fila.get(i++));
         itr.setFecharecibido(fila.get(i++));
-        List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat));
-        List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg));
+        List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat,1));
+        List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg,1));
         int idITR = con.insertarIgacITR(itr);
         for (Integer idProp : idsCat) {
             if (!con.insertarIgacItrCatProp(idITR, idProp)) {
@@ -192,7 +196,7 @@ public class Mapeo {
         String propietario = fila.get(i++);
         cat.setEstado(fila.get(i++));
         cat.setFecharecibido(fila.get(i++));
-        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario,2));
         int idCatastro = con.insertarAntioquiaCatastro(cat);
         for (Integer idProp : ids) {
             if (!con.insertarAntioquiaCatProp(idCatastro, idProp)) {
@@ -215,7 +219,7 @@ public class Mapeo {
         String propietario = fila.get(i++);
         reg.setEstado(fila.get(i++));
         reg.setFecharecibido(fila.get(i++));
-        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario,2));
         int idRegistro = con.insertarAntioquiaRegistro(reg);
         for (Integer idProp : ids) {
             if (!con.insertarAntioquiaRegProP(idRegistro, idProp)) {
@@ -249,8 +253,8 @@ public class Mapeo {
         itr.setCrdocumento(fila.get(i++));
         itr.setCrnombre(fila.get(i++));
         itr.setFecharecibido(fila.get(i++));
-        List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat));
-        List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg));
+        List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat,2));
+        List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg,2));
         int idITR = con.insertarAntioquiaITR(itr);
         for (Integer idProp : idsCat) {
             if (!con.insertarAntioquiaItrCatProP(idITR, idProp)) {
@@ -280,7 +284,7 @@ public class Mapeo {
         cat.setTipo(fila.get(i++));
         cat.setEstado(fila.get(i++));
         cat.setFecharecibido(fila.get(i++));
-        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario,2));
         int idCatastro = con.insertarAntioquiaCatastro(cat);
         for (Integer idProp : ids) {
             if (!con.insertarAntioquiaCatProp(idCatastro, idProp)) {
@@ -303,7 +307,7 @@ public class Mapeo {
         reg.setTipo(fila.get(i++));
         reg.setEstado(fila.get(i++));
         reg.setFecharecibido(fila.get(i++));
-        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario));
+        List<Integer> ids = guardarPropietarios(separarPropietarios(propietario,2));
         int idRegistro = con.insertarAntioquiaRegistro(reg);
         for (Integer idProp : ids) {
             if (!con.insertarAntioquiaRegProP(idRegistro, idProp)) {
@@ -337,8 +341,8 @@ public class Mapeo {
         itr.setCrdocumento(fila.get(i++));
         itr.setCrnombre(fila.get(i++));
         itr.setFecharecibido(fila.get(i++));
-        List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat));
-        List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg));
+        List<Integer> idsCat = guardarPropietarios(separarPropietarios(propietarioCat,2));
+        List<Integer> idsReg = guardarPropietarios(separarPropietarios(propietarioReg,2));
         int idITR = con.insertarAntioquiaITR(itr);
         for (Integer idProp : idsCat) {
             if (!con.insertarAntioquiaItrCatProP(idITR, idProp)) {
@@ -379,7 +383,7 @@ public class Mapeo {
         reg.setDireccion(fila.get(i++));
         reg.setTipo(fila.get(i++));
         reg.setFecharecibido(fila.get(i++));
-        con.insertarIgacRegistro(reg);
+        con.insertarMedellinRegistro(reg);
     }
 
     public void mapeoMedellinITR(List<String> fila) {
@@ -402,6 +406,6 @@ public class Mapeo {
         itr.setCrdocumento(fila.get(i++));
         itr.setCrnombre(fila.get(i++));
         itr.setFecharecibido(fila.get(i++));
-        con.insertarIgacITR(itr);
+        con.insertarMedellinITR(itr);
     }
 }

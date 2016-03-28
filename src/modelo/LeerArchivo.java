@@ -71,10 +71,10 @@ public class LeerArchivo {
     public void leerXLSX(XSSFWorkbook wb, String fecha, int numColumnas, int useCase, String nomArchivo) {
         log.info("Creando archivo XLSX para: "+nomArchivo);
         Sheet sheet = wb.getSheetAt(0);
-        List<String> fila = new ArrayList<>();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
+            List<String> fila = new ArrayList<>();
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
@@ -94,10 +94,10 @@ public class LeerArchivo {
     public void leerXLS(HSSFWorkbook wb, String fecha, int numColumnas, int useCase, String nomArchivo) {
         log.info("Creando archivo XLS para: "+nomArchivo);
         Sheet sheet = wb.getSheetAt(0);
-        List<String> fila = new ArrayList<>();
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
+            List<String> fila = new ArrayList<>();
             Row r = sheet.getRow(rowNum);
             if (r == null) {
                 log.info("Fila vacia: " + rowNum);
