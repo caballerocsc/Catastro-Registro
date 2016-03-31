@@ -7,8 +7,9 @@
 package Controlador;
 
 /**
- *
- * @author Usuario
+ * Clase que se encarga de almacenar las variables estaticas que 
+ * se usan para el funcionamiento de la aplicacion
+ * @author cesar solano
  */
 public class Parametros {
     

@@ -16,7 +16,8 @@ import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.POIXMLException;
 
 /**
- *
+ * Clase que se encarga de determina cual sera el metodo apropiado para 
+ * leer cada uno de los archivos que les llegan
  * @author Usuario
  */
 public class Orquestador extends Thread{

@@ -13,8 +13,10 @@ import obj.Propietario;
 import obj.Registro;
 
 /**
- *
- * @author Usuario
+ * Clase que tienen como funcion tomar las lista de 
+ * atributos leidos de una fila en excel y convertirla en 
+ * un objeto para que pueda ser guardado en la base de datos
+ * @author cesar solano
  */
 public class Mapeo {
 
@@ -23,6 +25,17 @@ public class Mapeo {
     public Mapeo() {
     }
 
+    /**
+     * Método que toma un String en el cual vienen varios propietarios con sus tipos
+     * y numeros de documento y los convierte en una lista de tipo Propietarios
+     * @param p cadena de texto en la cual vienen los propietarios con sus tipos
+     * y números de documento
+     * @param tipo indica por que medio se debe separar los propietarios
+     * 1: para separalos por doble guión "--"
+     * 2: para separar por un caracter especial "\r\n"
+     * @return  lista donde cada posicion contiene un objeto de tipo
+     * Propietario
+     */
     public List<Propietario> separarPropietarios(String p, int tipo) {
         log.info("Separando Propietarios");
         List<Propietario> listaProp = new ArrayList<>();
@@ -65,6 +78,14 @@ public class Mapeo {
         return listaProp;
     }
 
+    /**
+     * Método que permite tomar una lista de tipo Propietarios 
+     * y guardarlos en la base de datos
+     * @param propietarios Lista de tipo Propietario con los objetos que se almacenaran
+     * en la base de datos
+     * @return lista de tipo int con los id´s de cada propietario
+     * guardado en la base de datos
+     */
     public List<Integer> guardarPropietarios(List<Propietario> propietarios) {
         log.info("Guardando propietarios");
         List<Integer> identificadores = new ArrayList<>();
@@ -80,12 +101,27 @@ public class Mapeo {
         return identificadores;
     }
 
+    /**
+     * Método que permite obtener el codigo del municipio 
+     * a partir del nombre del archivo
+     * @param nombre nombre del archivo en excel
+     * @return codigo del municipio 
+     */
     public String obtenerMunicipioNombre(String nombre) {
         log.info("Obtener Nombre Municipios");
         String[] temp = nombre.split("-");
         return temp[1].substring(0, 5);
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel del IGAC y las convierte en un objeto
+     * de tipo Catastro, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación entre un registro de catastro y su propietario
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     */
     public void mapeoIgacCatastro(List<String> fila) {
         log.info("mapeoIgacCatastro");
         Consultas con = new Consultas();
@@ -114,6 +150,17 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel del IGAC y las convierte en un objeto
+     * de tipo Registro, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación entre un registro de registro y su propietario
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     * @param nomArchivo nombre del archivo en excel, necesario para 
+     * obtener el municipio del cual proviene la información
+     */
     public void mapeoIgacRegistro(List<String> fila, String nomArchivo) {
         log.info("mapeoIgacRegistro");
         Registro reg = new Registro();
@@ -137,6 +184,17 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel del IGAC y las convierte en un objeto
+     * de tipo ITR, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación propietario-catastro y propietario-registro
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     * @param nomArch nombre del archivo en excel, necesario para 
+     * obtener el municipio del cual proviene la información 
+     */
     public void mapeoIgacITR(List<String> fila, String nomArch) {
         log.info("mapeoIgacITR");
         Consultas con = new Consultas();
@@ -180,6 +238,16 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel de la gobernación de Antioquia
+     * para el año 2014 y las convierte en un objeto
+     * de tipo Catastro, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación entre un registro de catastro y su propietario
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     */
     public void mapeoGobAnt2014Catastro(List<String> fila) {
         log.info("mapeoGobAnt2014Catastro");
         Catastro cat = new Catastro();
@@ -205,6 +273,18 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel del la Gobernación de 
+     * Antioquia para el 2014 y las convierte en un objeto
+     * de tipo Registro, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación entre una tupla de registro y su propietario
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     * @param nomArch nombre del archivo en excel, necesario para 
+     * obtener el municipio del cual proviene la información
+     */
     public void mapeoGobAnt2014Registro(List<String> fila, String nomArch) {
         log.info("mapeoGobAnt2014Registro");
         Consultas con = new Consultas();
@@ -228,6 +308,16 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel de la Gobernación de Antioquia 
+     * para el año 2014 y las convierte en un objeto
+     * de tipo ITR, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación propietario-catastro y propietario-registro
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     */
     public void mapeoGobAnt2014ITR(List<String> fila) {
         log.info("mapeoGobAnt2014ITR");
         ITR itr = new ITR();
@@ -268,6 +358,16 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel de la gobernación de Antioquia
+     * para el año 2015 y las convierte en un objeto
+     * de tipo Catastro, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación entre un registro de catastro y su propietario
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     */
     public void mapeoGobAnt2015Catastro(List<String> fila) {
         log.info("mapeoGobAnt2015Catastro");
         Catastro cat = new Catastro();
@@ -293,6 +393,18 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel del la Gobernación de 
+     * Antioquia para el 2015 y las convierte en un objeto
+     * de tipo Registro, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación entre una tupla de registro y su propietario
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     * @param nomArch nombre del archivo en excel, necesario para 
+     * obtener el municipio del cual proviene la información
+     */
     public void mapeoGobAnt2015Registro(List<String> fila, String nomArch) {
         log.info("mapeoGobAnt2015Registro");
         Consultas con = new Consultas();
@@ -316,6 +428,16 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel de la Gobernación de Antioquia 
+     * para el año 2015 y las convierte en un objeto
+     * de tipo ITR, para insertarlo en la base de datos, 
+     * adicionalmente separa y guarda los propietarios y crea 
+     * la relación propietario-catastro y propietario-registro
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     */
     public void mapeoGobAnt2015ITR(List<String> fila) {
         log.info("mapeoGobAnt2015ITR");
         ITR itr = new ITR();
@@ -356,6 +478,14 @@ public class Mapeo {
         }
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel de la alcaldía de medellín 
+     * y las convierte en un objeto
+     * de tipo Catastro, para insertarlo en la base de datos.
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     */
     public void mapeoMedellinCatastro(List<String> fila) {
         log.info("mapeoMedellinCatastro");
         Consultas con = new Consultas();
@@ -373,6 +503,14 @@ public class Mapeo {
         con.insertarMedellinCatastro(cat);
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel de la alcaldía de medellín 
+     * y las convierte en un objeto
+     * de tipo Registro, para insertarlo en la base de datos.
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     */
     public void mapeoMedellinRegistro(List<String> fila) {
         log.info("mapeoMedellinRegistro");
         Consultas con = new Consultas();
@@ -386,6 +524,14 @@ public class Mapeo {
         con.insertarMedellinRegistro(reg);
     }
 
+    /**
+     * Método que toma una lista de tipo String con las
+     * celdas de una fila en excel de la alcaldía de medellín 
+     * y las convierte en un objeto
+     * de tipo ITR, para insertarlo en la base de datos.
+     * @param fila Lista de tipo String donde cada posición es la
+     * celda de una determinada fila
+     */
     public void mapeoMedellinITR(List<String> fila) {
         log.info("mapeoMedellinITR");
         Consultas con = new Consultas();

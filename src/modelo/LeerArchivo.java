@@ -31,6 +31,13 @@ public class LeerArchivo {
     public LeerArchivo() {
     }
 
+    /**
+     * Método que se encarga de obtener el contenido de una celda 
+     * de un archivo de excel
+     * @param c Celda del archivo
+     * @param r Fila del archivo 
+     * @return contenido de la celda, si se encuentra vacia retorna ""
+     */
     public String obtenerCeldaXLS(Cell c, Row r) {
         String resultado = "";
         if (c == null) {
@@ -68,6 +75,16 @@ public class LeerArchivo {
         return resultado.replace("'", "");
     }
 
+    /**
+     * Método que se encarga de crear leer un archivo con extensión xlsx.
+     * Por cada fila hace una iteracion y llama al método que decide a que funcion llamar
+     * para hacer el mapeo correspondiente
+     * @param wb archivo XLSX
+     * @param fecha fecha de ingreso de la información al repositorio
+     * @param numColumnas numero de columnas del archivo
+     * @param useCase numero de caso, para identificar a que case debe entrar 
+     * @param nomArchivo nombre del archivo, para obtener el municipio
+     */
     public void leerXLSX(XSSFWorkbook wb, String fecha, int numColumnas, int useCase, String nomArchivo) {
         log.info("Creando archivo XLSX para: "+nomArchivo);
         Sheet sheet = wb.getSheetAt(0);
@@ -91,6 +108,16 @@ public class LeerArchivo {
         }
     }
 
+    /**
+     * Método que se encarga de crear leer un archivo con extensión xls.
+     * Por cada fila hace una iteracion y llama al método que decide a que funcion llamar
+     * para hacer el mapeo correspondiente
+     * @param wb archivo XLSX
+     * @param fecha fecha de ingreso de la información al repositorio
+     * @param numColumnas numero de columnas del archivo
+     * @param useCase numero de caso, para identificar a que case debe entrar 
+     * @param nomArchivo nombre del archivo, para obtener el municipio
+     */
     public void leerXLS(HSSFWorkbook wb, String fecha, int numColumnas, int useCase, String nomArchivo) {
         log.info("Creando archivo XLS para: "+nomArchivo);
         Sheet sheet = wb.getSheetAt(0);
@@ -114,6 +141,17 @@ public class LeerArchivo {
         }
     }
 
+    /**
+     * Método que tiene como funcionalidad leer el archivo de excel como texto plano,
+     * pues algunos archivos no podian ser abiertos por la libreria POI para excel.
+     * Por cada fila hace una iteracion y llama al método que decide a que funcion llamar
+     * para hacer el mapeo correspondiente
+     * @param file Archivo de texto plano
+     * @param fecha fecha de ingreso de la información al repositorio
+     * @param numColumnas numero de columnas del archivo
+     * @param useCase numero de caso, para identificar a que case debe entrar 
+     * @param nomArchivo nombre del archivo, para obtener el municipio
+     */
     public void leerArchivoPlano(File file, String fecha, int numColumnas, int useCase, String nomArchivo) {
         log.info("Creando archivo TXT para: "+nomArchivo);
         FileReader f = null;
@@ -158,6 +196,14 @@ public class LeerArchivo {
         }
     }
 
+    /**
+     * Método encargado de direccionar la fila leida del archivo en excel a la
+     * funcion adecuada para que haga el mapeo respectivo
+     * @param nomArchivo Nombre del archivo, necesario para identificar el municipio
+     * @param useCase numero de caso, con esta variable se decide que tipo de mapeo realizar
+     * @param fila lista de String donde cada posicion contiene el 
+     * contenido de una celda de la fila leída
+     */
     public void seleccionarTabla(String nomArchivo, int useCase, List<String> fila) {
         Mapeo m = new Mapeo();
         switch (useCase) {

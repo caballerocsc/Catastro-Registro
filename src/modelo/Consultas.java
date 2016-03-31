@@ -27,6 +27,11 @@ public class Consultas {
     
     private static final Logger log = Logger.getLogger(Conexion.class);
      
+    /**
+     * Método encargado de verificar si un propietario ya existe en la base de datos
+     * @param p objeto de tipo Propietario con los datos a consultar
+     * @return retorna el id del propietario en caso de existir, si no existe retorna 0
+     */
     public int verificarPropietario(Propietario p){
         Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -53,6 +58,11 @@ public class Consultas {
        return id; 
     }
     
+    /**
+     * Método que inserta un objeto de tipo Propietario en la base de datos
+     * @param p objeto de tipo Propietario para insertar
+     * @return id del propietario que se inserto
+     */
     public int insertarPropietario(Propietario p){
         Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -80,6 +90,11 @@ public class Consultas {
        return id;
     }
     
+    /**
+     * Método que inserta en la base de datos un objeto de tipo catastro igac
+     * @param c Objeto de tipo Catastro
+     * @return id del registro en la base de datos
+     */
     public int insertarIgacCatastro(Catastro c){
         Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -117,6 +132,11 @@ public class Consultas {
        return id;
     }
     
+    /**
+     * Método que inserta en la base de datos un objeto de tipo Registro igac
+     * @param r Objeto de tipo Registro
+     * @return id del registro en la base de datos
+     */
     public int insertarIgacRegistro(Registro r){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -149,6 +169,11 @@ public class Consultas {
        return id;
     }
     
+    /**
+     * Método que inserta en la base de datos un objeto de tipo ITR igac
+     * @param itr Objeto de tipo ITR
+     * @return id del registro en la base de datos
+     */
     public int insertarIgacITR(ITR itr){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -193,6 +218,14 @@ public class Consultas {
        return id;
     }
     
+    /**
+     * Método que se encarga de insertar en la base de datos la relacion
+     * de un propietario con un registro de la tabla catastro
+     * @param idCat id del registro en la tabla Catastro
+     * @param idProp id del registro en la tabla Propietarios
+     * @return retorna falso si no se puede insertar el registro,
+     * de lo contrario retorna verdadero
+     */
     public boolean insertarIgacCatastroProp(int idCat,int idProp){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -218,6 +251,14 @@ public class Consultas {
        return result;
     }
     
+    /**
+     * Método que se encarga de insertar en la base de datos la relacion
+     * de un propietario con un registro de la tabla Registro
+     * @param idReg id del registro en la tabla Registro
+     * @param idProp id del registro en la tabla Propietarios
+     * @return retorna falso si no se puede insertar el registro,
+     * de lo contrario retorna verdadero
+     */
     public boolean insertarIgacRegistroProp(int idReg,int idProp){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -242,6 +283,13 @@ public class Consultas {
        return result;
     }
     
+    /**
+     * Método que se encarga de insertar en la base de datos la relacion
+     * del ITR con el propietario en catastro
+     * @param idItr id del itr en la base de datos
+     * @param idProp id del propietario en la base de datos
+     * @return 
+     */
     public boolean insertarIgacItrCatProp(int idItr,int idProp){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -266,6 +314,13 @@ public class Consultas {
        return result;
     }
     
+    /**
+     * Método que se encarga de insertar en la base de datos la relacion
+     * del ITR con el propietario en registro
+     * @param idItr id del itr en la base de datos
+     * @param idProp id del propietario en la base de datos
+     * @return 
+     */
     public boolean insertarIgacItrRegProp(int idItr,int idProp){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -290,6 +345,12 @@ public class Consultas {
        return result;
     }
     
+    /**
+     * Método que inserta en la base de datos un objeto de tipo catastro antioquia,
+     * sin importar el año del que proviene la informacion se guarda en una misma tabla
+     * @param c Objeto de tipo Catastro
+     * @return id del registro en la base de datos
+     */
     public int insertarAntioquiaCatastro(Catastro c){
         Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -332,6 +393,14 @@ public class Consultas {
        return id;
     }
     
+    /**
+     * Método que se encarga de guardar en la base de datos la relacion
+     * de catastro antioquia con su propietario
+     * @param idAntCat id del registro de antioquia catastro
+     * @param idProp id del propietario
+     * @return retorna falso si no se puede realizar la insercion
+     * del contrario retorna verdadero
+     */
     public boolean insertarAntioquiaCatProp(int idAntCat,int idProp){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -356,6 +425,12 @@ public class Consultas {
        return result;
     }
     
+    /**
+     * Método que se encarga de insertar un objeto de registro antioquia 
+     * sin importar el año de la información.
+     * @param r objeto de tipo registro que se insertara
+     * @return retorna el id del registro en la base de datos
+     */
     public int insertarAntioquiaRegistro(Registro r){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -387,6 +462,13 @@ public class Consultas {
        return id;
     }
     
+    /**
+     * Método que se encarga de guardar la relacion entre un propietario 
+     * y el registro para antioquia
+     * @param idAntReg id del registo para antioquia
+     * @param idProp id del propietario
+     * @return  retorna false si no se puede realizar la conexion
+     */
     public boolean insertarAntioquiaRegProP(int idAntReg,int idProp){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -411,6 +493,11 @@ public class Consultas {
        return result;
     }
     
+    /**
+     * Método que se encarga de insetar los objetos ITR para antioquia
+     * @param itr objeto itr que se guarda en la base de datos
+     * @return  id del registro en la base de datos
+     */
     public int insertarAntioquiaITR(ITR itr){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -468,7 +555,13 @@ public class Consultas {
        return id;
     }
     
-    
+    /**
+     * Método que se encarga de guardar la relacion de itr antioquia con 
+     * un propietario catastro
+     * @param idAntcat id del registro itr en la base de datos
+     * @param idProp id del propietario
+     * @return retorna falso si no se puede guardar la relación
+     */
     public boolean insertarAntioquiaItrCatProP(int idAntcat,int idProp){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -493,7 +586,13 @@ public class Consultas {
        return result;
     }
     
-    
+    /**
+     * Método que se encarga de guardar la relacion de itr antioquia con 
+     * un propietario registro
+     * @param idAntReg id del registro itr en la base de datos
+     * @param idProp id del propietario
+     * @return retorna falso si no se puede guardar la relación
+     */
     public boolean insertarAntioquiaItrRegProP(int idAntReg,int idProp){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -518,6 +617,11 @@ public class Consultas {
        return result;
     }
     
+    /**
+     * Método que guarda en la base de datos el catastro de medellin 
+     * @param c objeto de tipo catastro a guardar
+     * @return retorna el id del registro en la base de datos
+     */
     public int insertarMedellinCatastro(Catastro c){
         Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -547,7 +651,11 @@ public class Consultas {
         }
        return id;
     }
-    
+    /**Método que se encarga de guardar en la base de datos 
+     * un objeto de tipo registro
+     * @param r objeto de tipo registro a guardar en la base de datos
+     * @return id del registro guardado
+     */
     public int insertarMedellinRegistro(Registro r){
     Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -576,6 +684,11 @@ public class Consultas {
        return id;
     }
     
+    /**
+     * Método que se encarga de guardar un objeto itr de medellin en la base de datos
+     * @param itr objeto a guardar en la base de datos
+     * @return  id del registro en la base de datos.
+     */
     public int insertarMedellinITR(ITR itr){
     Conexion con=new Conexion();
         PreparedStatement ps=null;

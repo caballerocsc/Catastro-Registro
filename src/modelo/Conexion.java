@@ -24,10 +24,15 @@ public class Conexion {
     }
 
     String driver = "org.postgresql.Driver";
-    String connectString = "jdbc:postgresql://localhost:5432/cata2";
+    String connectString = "jdbc:postgresql://localhost:5432/cata3";
     String user = "postgres";
     String password = "123456";
 
+    /**
+     * Método que se encarga de establecer la conexion a la base de datos
+     * y retornar el objeto para que se puedan hacer operaciones sobre la BD
+     * @return Objeto de tipo Connection 
+     */
     public Connection getConexion() {
         Connection con = null;
         try {

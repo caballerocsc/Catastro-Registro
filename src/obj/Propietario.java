@@ -7,8 +7,9 @@
 package obj;
 
 /**
- *
- * @author Usuario
+ * Clase que permite mapearlos propietarios de los archivos de excel a objetos java,
+ * para luego ser guardados en la base de datos
+ * @author cesar solano
  */
 public class Propietario {
 
