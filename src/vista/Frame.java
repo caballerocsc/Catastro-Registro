@@ -11,14 +11,17 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author Usuario
+ * Clase principal que se encarga de ejecutar el programa y adicionalmente 
+ * contiene el codigo de interfaz de usuario
+ * @author cesar solano
  */
 public class Frame extends javax.swing.JFrame {
 
     /**
      * Creates new form Frame
      */
+    
+    
     public Frame() {
         initComponents();
     }
@@ -119,6 +122,12 @@ public class Frame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que se encarga de lanzar la ventana donde se digita la fecha de 
+     * ingreso de la información a la UPRA, y  la ventana donde el usuario selecciona
+     * la ruta donde se encuentran los archivos a cargar del IGAC
+     * @param evt evento del botón
+     */
     private void BigacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BigacActionPerformed
         Controlador c=new Controlador();
         String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
@@ -129,6 +138,12 @@ public class Frame extends javax.swing.JFrame {
         c.cargarIgac(jFileChooser2, fecha);
     }//GEN-LAST:event_BigacActionPerformed
 
+    /**
+     * Método que se encarga de lanzar la ventana donde se digita la fecha de 
+     * ingreso de la información a la UPRA, y  la ventana donde el usuario selecciona
+     * la ruta donde se encuentran los archivos a cargar de Medellín
+     * @param evt evento del botón
+     */
     private void BmedellinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BmedellinActionPerformed
         Controlador c=new Controlador();
         String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
@@ -139,6 +154,12 @@ public class Frame extends javax.swing.JFrame {
         c.cargarMedellin(jFileChooser2, fecha);
     }//GEN-LAST:event_BmedellinActionPerformed
 
+    /**
+     * Método que se encarga de lanzar la ventana donde se digita la fecha de 
+     * ingreso de la información a la UPRA, y  la ventana donde el usuario selecciona
+     * la ruta donde se encuentran los archivos a cargar de antioquia 2014
+     * @param evt evento del botón
+     */
     private void Bantioquia14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bantioquia14ActionPerformed
         Controlador c=new Controlador();
         String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");
@@ -149,6 +170,12 @@ public class Frame extends javax.swing.JFrame {
         c.cargarAntioquia2014(jFileChooser2, fecha);
     }//GEN-LAST:event_Bantioquia14ActionPerformed
 
+    /**
+     * Método que se encarga de lanzar la ventana donde se digita la fecha de 
+     * ingreso de la información a la UPRA, y  la ventana donde el usuario selecciona
+     * la ruta donde se encuentran los archivos a cargar de antioquia 2015
+     * @param evt evento del botón
+     */
     private void Bantioquia15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Bantioquia15ActionPerformed
         Controlador c=new Controlador();
         String fecha=JOptionPane.showInputDialog(this, "Digite la fecha de ingreso a la UPRA");

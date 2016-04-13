@@ -8,43 +8,51 @@ package Controlador;
 
 import java.io.File;
 import javax.swing.JFileChooser;
-import modelo.LeerExcel;
 
 /**
- *
- * @author Usuario
+ * Clase que se encarga de realizar la conexion entre la opcion que selecciono el usuario 
+ * y la forma en que el archivo debe ser leido por la aplicación. 
+ * @author cesar solano
  */
 public class Controlador {
 
     
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Controlador.class);
     
+    
+    
     public Controlador() {
     }
     
     
     public boolean  cargarIgac(JFileChooser chooser, String fecha){
-        LeerExcel excel=new LeerExcel();
+        log.info("Método CargarIgac");
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
+            File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
             switch(tipo){
                 case "CAT":{
-                    excel.igacCatastro(new File(arch), fecha);
+                    log.info("Método CargarIgac CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASIGACCATASTRO, Parametros.IGACCATASTRO);
+                    o.run();
                     break;
                 }
                 case "REG":{
-                    excel.igacRegistro(new File(arch), fecha);
+                    log.info("Método CargarREG");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASIGACREGISTRO,Parametros.IGACREGISTRO );
+                    o.run();
                     break;
                 }
                 case "ITR":{
-                    excel.igacITR(new File(arch), fecha);
+                    log.info("Método CargarITR");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASIGACITR,Parametros.IGACITR);
+                    o.run();
                     break;
                 }
                 default:{
-                    log.error("El nombre del archivo esta mal formado y no fue leído: "+tipo);
+                    log.error("El nombre del archivo esta mal formado y no fue leído: "+doc.getName());
                 }
             }
             
@@ -53,27 +61,32 @@ public class Controlador {
     }
     
     public boolean  cargarMedellin(JFileChooser chooser, String fecha){
-        LeerExcel excel=new LeerExcel();
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
+            File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
             switch(tipo){
                 case "CAT":{
-                    excel.medellinCatastro(new File(arch), fecha);
+                    log.info("Método CargarMedellin CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASMEDELLINCATASTRO, Parametros.MEDELLINCAT);
+                    o.run();
                     break;
                 }
                 case "REG":{
-                    excel.medellinRegistro(new File(arch), fecha);
+                    log.info("Método CargaMedellinREG");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASMEDELLINREGISTRO, Parametros.MEDELLINREG);
+                    o.run();
                     break;
                 }
                 case "ITR":{
-                    excel.medellinITR(new File(arch), fecha);
+                    log.info("Método CargarMedellinITR");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASMEDELLINITR, Parametros.MEDELLINITR);
+                    o.run();
                     break;
                 }
                 default:{
-                    log.error("El nombre del archivo esta mal formado y no fue leído");
+                    log.error("El nombre del archivo esta mal formado y no fue leído: "+doc.getName());
                 }
             }
             
@@ -82,27 +95,32 @@ public class Controlador {
     }
      
     public boolean  cargarAntioquia2014(JFileChooser chooser, String fecha){
-        LeerExcel excel=new LeerExcel();
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
+            File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
             switch(tipo){
                 case "CAT":{
-                    excel.gobAnt2014Catastro(new File(arch), fecha);
+                    log.info("Método CargarAntioquia2014CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2014CAT, Parametros.GOBANT2014CAT);
+                    o.run();
                     break;
                 }
                 case "REG":{
-                    excel.GobAnt2014Registro(new File(arch), fecha);
+                    log.info("Método CargarAntioquia2014REG");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2014REG, Parametros.GOBANT2014REG);
+                    o.run();
                     break;
                 }
                 case "ITR":{
-                    excel.gobAnt2014ITR(new File(arch), fecha);
+                    log.info("Método CargarAntioquia2014ITR");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2014ITR, Parametros.GOBANT2014ITR);
+                    o.run();
                     break;
                 }
                 default:{
-                    log.error("El nombre del archivo esta mal formado y no fue leído");
+                    log.error("El nombre del archivo esta mal formado y no fue leído: "+doc.getName());
                 }
             }
         }
@@ -110,30 +128,37 @@ public class Controlador {
     }
     
     public boolean  cargarAntioquia2015(JFileChooser chooser,String fecha){
-        LeerExcel excel=new LeerExcel();
         String[] archivos=chooser.getSelectedFile().list();
         String tipo;
         for (int i = 0; i < archivos.length; i++) {
             tipo=archivos[i].substring(0, 3);
-            String arch=chooser.getSelectedFile().toString()+"/"+archivos[i];
+            File doc=new File(chooser.getSelectedFile().toString()+"/"+archivos[i]);
             switch(tipo){
                 case "CAT":{
-                    excel.gobAnt2015Catastro(new File(arch), fecha);
+                    log.info("Método CargarAntioquia2015CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2015CAT, Parametros.GOBANT2015CAT);
+                    o.run();
                     break;
                 }
                 case "REG":{
-                    excel.GobAnt2015Registro(new File(arch), fecha);
+                    log.info("Método CargarAntioquia2015CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2015REG, Parametros.GOBANT2015REG);
+                    o.run();
                     break;
                 }
                 case "ITR":{
-                    excel.gobAnt2015ITR(new File(arch), fecha);
+                    log.info("Método CargarAntioquia2015CAT");
+                    Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2015ITR, Parametros.GOBANT2015ITR);
+                    o.run();
                     break;
                 }
                 default:{
-                    log.error("El nombre del archivo esta mal formado y no fue leído");
+                    log.error("El nombre del archivo esta mal formado y no fue leído: "+doc.getName());
                 }
             }
         }
         return false;
     }
+    
+    
 }

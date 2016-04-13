@@ -71,4 +71,7 @@ nbproject/project.properties
 nbproject/private/private.xml
 /build/
 archivo.log
+/dist/
 *.txt
+*.log
+

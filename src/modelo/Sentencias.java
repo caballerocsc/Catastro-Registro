@@ -7,8 +7,8 @@
 package modelo;
 
 /**
- *
- * @author Usuario
+ * Clase tipo enum que almacenas las sentencias que se deben ejecutar en la base de datos
+ * @author Cesar Solano
  */
 public enum Sentencias {
     
