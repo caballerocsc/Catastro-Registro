@@ -141,13 +141,13 @@ public class Controlador {
                     break;
                 }
                 case "REG":{
-                    log.info("Método CargarAntioquia2015CAT");
+                    log.info("Método CargarAntioquia2015REG");
                     Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2015REG, Parametros.GOBANT2015REG);
                     o.run();
                     break;
                 }
                 case "ITR":{
-                    log.info("Método CargarAntioquia2015CAT");
+                    log.info("Método CargarAntioquia2015ITR");
                     Orquestador o = new Orquestador(doc, fecha, Parametros.COLUMNASGOBANT2015ITR, Parametros.GOBANT2015ITR);
                     o.run();
                     break;

@@ -438,18 +438,27 @@ public class Mapeo {
      * @param fila Lista de tipo String donde cada posición es la
      * celda de una determinada fila
      */
-    public void mapeoGobAnt2015ITR(List<String> fila) {
+    public void mapeoGobAnt2015ITR(List<String> fila, String nom, int tipoArc) {
         log.info("mapeoGobAnt2015ITR");
         ITR itr = new ITR();
         Consultas con = new Consultas();
         int i = 0;
         itr.setNumpredio(fila.get(i++));
         itr.setPredialcat(fila.get(i++));
-        itr.setMunicipioidfk(fila.get(i++));
-        itr.setDepartamentoidfk(fila.get(2).substring(0, 2));
-        itr.setAvaluos(fila.get(i++));
-        itr.setCorregimiento(fila.get(i++));
-        itr.setCirculo(fila.get(i++));
+        if(tipoArc==0){
+            itr.setMunicipioidfk("05"+nom.substring(4, 7));
+            itr.setDepartamentoidfk("05");
+        }else if(tipoArc==1){
+            itr.setMunicipioidfk("05"+fila.get(i++));
+            itr.setDepartamentoidfk("05");
+            itr.setAvaluos(fila.get(i++));
+            itr.setCorregimiento(fila.get(i++));
+            itr.setCirculo(fila.get(i++));
+        }else if(tipoArc==2){
+            itr.setMunicipioidfk("05"+nom.substring(4, 7));
+            itr.setDepartamentoidfk("05");
+            itr.setCirculo(fila.get(i++));
+        }
         itr.setMatricula(fila.get(i++));
         itr.setAreaterreno(Float.parseFloat(fila.get(i++)));
         itr.setAreaconstruida(Float.parseFloat(fila.get(i++)));

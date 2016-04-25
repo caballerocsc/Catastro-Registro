@@ -240,7 +240,7 @@ public class LeerArchivo {
                 break;
             }
             case Parametros.GOBANT2015ITR: {
-                m.mapeoGobAnt2015ITR(fila);
+                m.mapeoGobAnt2015ITR(fila,nomArchivo,seleccionTipo(nomArchivo));
                 break;
             }
             case Parametros.MEDELLINCAT: {
@@ -259,5 +259,16 @@ public class LeerArchivo {
                 log.error("NO entro a ningun caso del metodo seleccionarTabla");
             }
         }
+    }
+    
+    /**
+     * Método que determina que metodo de mapeo usar, pues en para los 
+     * archivos itr 2015 de antioquia habian varios formatos de archivos
+     * @param nombre nombre del archivo
+     * @return tipo de mapeo a utilizar
+     */
+    public int seleccionTipo(String nombre){
+        String[] tmp=nombre.split("=");
+        return Integer.parseInt(tmp[1].substring(0, 1));
     }
 }
