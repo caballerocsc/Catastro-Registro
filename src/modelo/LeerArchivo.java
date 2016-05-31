@@ -41,10 +41,10 @@ public class LeerArchivo {
     public String obtenerCeldaXLS(Cell c, Row r) {
         String resultado = "";
         if (c == null) {
-            log.info("Celda vacia en fila: " + r.getRowNum());
+//            log.info("Celda vacia en fila: " + r.getRowNum());
         } else {
             CellReference cellRef = new CellReference(r.getRowNum(), c.getColumnIndex());
-            log.info(cellRef.formatAsString());
+//            log.info(cellRef.formatAsString());
 //            log.info(" - ");
             switch (c.getCellType()) {
                 case Cell.CELL_TYPE_STRING:
@@ -91,6 +91,7 @@ public class LeerArchivo {
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
+            log.info("Leyendo fila: "+rowNum);
             List<String> fila = new ArrayList<>();
             Row r = sheet.getRow(rowNum);
             if (r == null) {
@@ -124,6 +125,7 @@ public class LeerArchivo {
         int rowStart = 1;
         int rowEnd = Math.max(2, sheet.getLastRowNum());
         for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
+            log.info("Leyendo fila: "+rowNum);
             List<String> fila = new ArrayList<>();
             Row r = sheet.getRow(rowNum);
             if (r == null) {
@@ -178,7 +180,7 @@ public class LeerArchivo {
                     vacias++;
                     log.info("Fila vacia: "+j);
                 }
-                if (vacias==10) {//si se encuentra 10 celdas vacias seguidas, termina el proceso en vez de leer todas las filas vacias
+                if (vacias==30) {//si se encuentra 10 celdas vacias seguidas, termina el proceso en vez de leer todas las filas vacias
                     break;
                 }
                 j++;
